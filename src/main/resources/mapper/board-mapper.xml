@@ -3,8 +3,39 @@
 
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <!-- namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 적어주세요 -->
-<mapper namespace="mapper">
-	
+<mapper namespace="com.green.backend_plant_comunity.board.mapper.BoardMapper">
+    <!--board-->
+	<resultMap id="board" type="com.green.backend_plant_comunity.board.dto.BoardDTO">
+        <id property="BOARD_NUM" column="boardNum"/>
+        <result property="TITLE" column="title"/>
+        <result property="CONTENT" column="content"/>
+        <result property="MEM_ID" column="memId"/>
+        <result property="CATE_NUM" column="cateNum"/>
+        <result property="READ_CNT" column="readCnt"/>
+        <result property="LIKE_CNT" column="likeCnt"/>
+        <result property="DISLIKE_CNT" column="dislikeCnt"/>
+        <result property="CREATE_DATE" column="createDate"/>
+    </resultMap>
+
+    <!--boardImg-->
+    <resultMap id="boardImg" type="com.green.backend_plant_comunity.board.dto.BoardImgDTO">
+        <result property="IMG_NUM" column="imgNum"/>
+        <result property="ORIGIN_IMG_NAME" column="originImgName"/>
+        <result property="ATTACHED_IMG_NAME" column="attachedImgName"/>
+        <result property="BOARD_NUM" column="boardNum"/>
+    </resultMap>
+    <!--글쓸때 텍스트에 이미지 나오게하기-->
+    <insert id="writeImg">
+        INSERT INTO BOARD_IMG(
+            ORIGIN_IMG_NAME
+            , ATTACHED_IMG_NAME
+        )VALUES(
+        <foreach collection="imgList" item ="boardImg" separator=",">
+            (#{boardImg.originImgName}, #{boardImg.attachedImgName})
+        </foreach>
+        )
+    </insert>
+
 </mapper>
 
 
