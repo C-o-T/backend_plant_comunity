@@ -3,8 +3,64 @@
 
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <!-- namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 적어주세요 -->
-<mapper namespace="mapper">
-	
+<mapper namespace="com.green.backend_plant_comunity.member.mapper.MemberMapper">
+	<resultMap id="member" type="com.green.backend_plant_comunity.member.dto.MemberDTO">
+        <id     column="memId"              property="MEM_ID" />
+        <result column="memPw"              property="MEM_PW" />
+        <result column="memName"            property="MEM_NAME" />
+        <result column="memAddr"            property="MEM_ADDR" />
+        <result column="memDetailAddr"      property="MEM_DETAIL_ADDR" />
+        <result column="memTell"            property="MEM_TELL" />
+        <result column="memEmail"           property="MEM_EMAIL" />
+        <result column="memGrade"           property="MEM_GRADE" />
+        <result column="joinDate"           property="JOIN_DATE" />
+        <result column="memBusinessNum"     property="MEM_BUSINESS_NUM" />
+        <result column="memBusinessName"    property="MEM_BUSINESS_NAME" />
+    </resultMap>
+
+    <!--회원가입 버튼 누르면 실행할 쿼리-->
+    <insert id="joinMember">
+        INSERT INTO member(
+            MEM_ID
+            , MEM_PW
+            , MEM_NAME
+            , MEM_ADDR
+            , MEM_DETAIL_ADDR
+            , MEM_TELL
+            , MEM_EMAIL
+            , MEM_BUSINESS_NUM
+            , MEM_BUSINESS_NAME
+        ) VALUES (
+            #{memId}
+            , #{memPw}
+            , #{memName}
+            , #{memAddr}
+            , #{memDetailAddr}
+            , #{memTell}
+            , #{memEmail}
+            , #{memBusinessNum}
+            , #{memBusinessName}
+        );
+    </insert>
+
+    <!--회원아이디 중복검사-->
+    <select id="checkId" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            member
+        WHERE
+            MEM_ID = #{memId}
+    </select>
+    <!--사업자번호 중복검사-->
+    <select id="checkBusinessNum" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            member
+        WHERE
+            MEM_BUSINESS_NUM = #{memBusinessNum}
+    </select>
 </mapper>
 
 
