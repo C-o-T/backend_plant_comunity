@@ -6,23 +6,23 @@
 <mapper namespace="com.green.backend_plant_comunity.board.mapper.BoardMapper">
     <!--board-->
 	<resultMap id="board" type="com.green.backend_plant_comunity.board.dto.BoardDTO">
-        <id property="BOARD_NUM" column="boardNum"/>
-        <result property="TITLE" column="title"/>
-        <result property="CONTENT" column="content"/>
-        <result property="MEM_ID" column="memId"/>
-        <result property="CATE_NUM" column="cateNum"/>
-        <result property="READ_CNT" column="readCnt"/>
-        <result property="LIKE_CNT" column="likeCnt"/>
-        <result property="DISLIKE_CNT" column="dislikeCnt"/>
-        <result property="CREATE_DATE" column="createDate"/>
+        <id     column="BOARD_NUM"   property="boardNum"/>
+        <result column="TITLE"       property="title"/>
+        <result column="CONTENT"     property="content"/>
+        <result column="MEM_ID"      property="memId"/>
+        <result column="CATE_NUM"    property="cateNum"/>
+        <result column="READ_CNT"    property="readCnt"/>
+        <result column="LIKE_CNT"    property="likeCnt"/>
+        <result column="DISLIKE_CNT" property="dislikeCnt"/>
+        <result column="CREATE_DATE" property="createDate"/>
     </resultMap>
 
     <!--boardImg-->
     <resultMap id="boardImg" type="com.green.backend_plant_comunity.board.dto.BoardImgDTO">
-        <id property="IMG_NUM" column="imgNum"/>
-        <result property="ORIGIN_IMG_NAME" column="originImgName"/>
-        <result property="ATTACHED_IMG_NAME" column="attachedImgName"/>
-        <result property="BOARD_NUM" column="boardNum"/>
+        <id     column="IMG_NUM"            property="imgNum"/>
+        <result column="ORIGIN_IMG_NAME"    property="originImgName"/>
+        <result column="ATTACHED_IMG_NAME"  property="attachedImgName"/>
+        <result column="BOARD_NUM"          property="boardNum"/>
     </resultMap>
 
     <!--글쓸때 파일에 등록된 이미지 데이터베이스에 저장-->
@@ -56,12 +56,19 @@
     </insert>
     <!--BOARD 테이블에 데이터 삽입 시 저장되는 BOARD_NUM을 조회하는 쿼리-->
     <select id="getNextBoardNum" resultType="int">
-        SELECT IF NULL(MAX(BOARD_NUM), 0) + 1 FROM BOARD
+        SELECT IFNULL(MAX(BOARD_NUM), 0) + 1 FROM BOARD
     </select>
 
     <!--홈 화면 인기글 조회-->
     <select id="getPopularWriting" resultMap="board">
-        SELECT BOARD_NUM, TITLE, MEM_ID, CATE_NUM, READ_CNT, LIKE_CNT, DISLIKE_CNT, CREATE_DATE
+        SELECT
+            BOARD_NUM,
+            TITLE, MEM_ID,
+            CATE_NUM,
+            READ_CNT,
+            LIKE_CNT,
+            DISLIKE_CNT,
+            CREATE_DATE
         FROM BOARD
         ORDER BY (LIKE_CNT + READ_CNT) DESC, CREATE_DATE DESC
         LIMIT 10
