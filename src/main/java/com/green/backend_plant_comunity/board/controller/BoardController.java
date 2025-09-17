@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +22,10 @@ import java.util.Map;
 public class BoardController {
    private final BoardService boardService;
    @PostMapping("")
-   public void writeImg(@RequestParam("img")List<MultipartFile> imgs, BoardDTO boardDTO) {
+   public void writeImg(@RequestParam("img") List<MultipartFile> imgs, BoardDTO boardDTO) {
 
-      imgs.stream().forEach(img -> System.out.println(img.getSize()));
+      //Arrays.asList(imgs).stream().forEach(img -> System.out.println(img.getSize()));
+
 
       List<BoardImgDTO> dtoList = FileUploadUtil.fileUpload(imgs);
 
