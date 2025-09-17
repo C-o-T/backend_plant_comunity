@@ -51,7 +51,7 @@
             #{title}
             , #{content}
             , #{memId}
-            , #{cateNum}
+            , #{herbNum}
         )
     </insert>
     <!--BOARD 테이블에 데이터 삽입 시 저장되는 BOARD_NUM을 조회하는 쿼리-->
