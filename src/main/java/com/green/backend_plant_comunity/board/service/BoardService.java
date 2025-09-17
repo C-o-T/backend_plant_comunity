@@ -19,13 +19,14 @@ public class BoardService {
       int nextBoardNum = boardMapper.getNextBoardNum();
 
       boardDTO.setBoardNum(nextBoardNum);
-
-      for(BoardImgDTO dto : imgList){
-         dto.setBoardNum(nextBoardNum);
+      boardMapper.writeBoard(boardDTO);
+      if(imgList != null && !imgList.isEmpty()) {
+         for (BoardImgDTO dto : imgList) {
+            dto.setBoardNum(nextBoardNum);
+         }
+         boardMapper.writeImg(imgList);
       }
 
-      boardMapper.writeBoard(boardDTO);
-      boardMapper.writeImg(imgList);
 
    }
 }

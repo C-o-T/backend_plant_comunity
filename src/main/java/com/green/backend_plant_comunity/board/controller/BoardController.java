@@ -21,9 +21,12 @@ import java.util.Map;
 @RequestMapping("/boards")
 public class BoardController {
    private final BoardService boardService;
-   @PostMapping("")
-   public void writeImg(@RequestParam("img") List<MultipartFile> imgs, BoardDTO boardDTO) {
 
+   @PostMapping("")
+   public void writeImg(@RequestParam(name = "img", required = false) List<MultipartFile> imgs, BoardDTO boardDTO) {
+      if(imgs == null){
+         imgs = new ArrayList<>();
+      }
       //Arrays.asList(imgs).stream().forEach(img -> System.out.println(img.getSize()));
 
 
