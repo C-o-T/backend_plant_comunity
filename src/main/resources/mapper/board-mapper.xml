@@ -19,24 +19,27 @@
 
     <!--boardImg-->
     <resultMap id="boardImg" type="com.green.backend_plant_comunity.board.dto.BoardImgDTO">
-        <result property="IMG_NUM" column="imgNum"/>
+        <id property="IMG_NUM" column="imgNum"/>
         <result property="ORIGIN_IMG_NAME" column="originImgName"/>
         <result property="ATTACHED_IMG_NAME" column="attachedImgName"/>
         <result property="BOARD_NUM" column="boardNum"/>
     </resultMap>
 
     <!--글쓸때 파일에 등록된 이미지 데이터베이스에 저장-->
+
     <insert id="writeImg">
-        INSERT INTO BOARD_IMG(
-               ORIGIN_IMG_NAME
+        <if test="imgList != null and imgList.size() > 0">
+            INSERT INTO BOARD_IMG(
+            ORIGIN_IMG_NAME
             , ATTACHED_IMG_NAME
             , BOARD_NUM
-        )VALUES(
-        <foreach collection="imgList" item ="boardImg" separator=",">
-            #{boardImg.originImgName}, #{boardImg.attachedImgName}, #{boardImg.boardNum}
-        </foreach>
-        )
+            )VALUES
+            <foreach collection="imgList" item="boardImg" separator=",">
+                (#{boardImg.originImgName}, #{boardImg.attachedImgName}, #{boardImg.boardNum})
+            </foreach>
+        </if>
     </insert>
+
     <!--글쓰기 등록-->
     <insert id="writeBoard">
         INSERT INTO BOARD(

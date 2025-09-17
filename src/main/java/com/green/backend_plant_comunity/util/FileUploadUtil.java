@@ -17,7 +17,6 @@ public class FileUploadUtil {
       // ex> 원본 파일명 : java.jpg  -> fgfsdgdfgffefef.jpg
       // ex> 원본 파일명 : java.txt  -> hyhdfvsrrsfr.txt
 
-
       //리턴되는 모든 데이터를 저장할 list
       List<BoardImgDTO> imgList = new ArrayList<>();
 

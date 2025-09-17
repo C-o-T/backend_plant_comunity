@@ -19,13 +19,13 @@ public class BoardService {
       int nextBoardNum = boardMapper.getNextBoardNum();
 
       boardDTO.setBoardNum(nextBoardNum);
-
-      for(BoardImgDTO dto : imgList){
-         dto.setBoardNum(nextBoardNum);
-      }
-
       boardMapper.writeBoard(boardDTO);
-      boardMapper.writeImg(imgList);
+      if(imgList != null && !imgList.isEmpty()) {
+         for (BoardImgDTO dto : imgList) {
+            dto.setBoardNum(nextBoardNum);
+         }
+         boardMapper.writeImg(imgList);
+      }
    }
 
    //마이팜 게시글 조회
