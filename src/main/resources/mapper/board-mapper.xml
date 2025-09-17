@@ -3,8 +3,58 @@
 
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <!-- namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 적어주세요 -->
-<mapper namespace="mapper">
-	
+<mapper namespace="com.green.backend_plant_comunity.board.mapper.BoardMapper">
+    <!--board-->
+	<resultMap id="board" type="com.green.backend_plant_comunity.board.dto.BoardDTO">
+        <id property="BOARD_NUM" column="boardNum"/>
+        <result property="TITLE" column="title"/>
+        <result property="CONTENT" column="content"/>
+        <result property="MEM_ID" column="memId"/>
+        <result property="CATE_NUM" column="cateNum"/>
+        <result property="READ_CNT" column="readCnt"/>
+        <result property="LIKE_CNT" column="likeCnt"/>
+        <result property="DISLIKE_CNT" column="dislikeCnt"/>
+        <result property="CREATE_DATE" column="createDate"/>
+    </resultMap>
+
+    <!--boardImg-->
+    <resultMap id="boardImg" type="com.green.backend_plant_comunity.board.dto.BoardImgDTO">
+        <result property="IMG_NUM" column="imgNum"/>
+        <result property="ORIGIN_IMG_NAME" column="originImgName"/>
+        <result property="ATTACHED_IMG_NAME" column="attachedImgName"/>
+        <result property="BOARD_NUM" column="boardNum"/>
+    </resultMap>
+
+    <!--글쓸때 파일에 등록된 이미지 데이터베이스에 저장-->
+    <insert id="writeImg">
+        INSERT INTO BOARD_IMG(
+               ORIGIN_IMG_NAME
+            , ATTACHED_IMG_NAME
+            , BOARD_NUM
+        )VALUES(
+        <foreach collection="imgList" item ="boardImg" separator=",">
+            #{boardImg.originImgName}, #{boardImg.attachedImgName}, #{boardImg.boardNum}
+        </foreach>
+        )
+    </insert>
+    <!--글쓰기 등록-->
+    <insert id="writeBoard">
+        INSERT INTO BOARD(
+            TITLE
+            , CONTENT
+            , MEM_ID
+            , CATE_NUM
+        )VALUES(
+            #{title}
+            , #{content}
+            , #{memId}
+            , #{cateNum}
+        )
+    </insert>
+    <!--BOARD 테이블에 데이터 삽입 시 저장되는 BOARD_NUM을 조회하는 쿼리-->
+    <select id="getNextBoardNum" resultType="int">
+        SELECT IFNULL(MAX(BOARD_NUM), 0) + 1 FROM BOARD
+    </select>
 </mapper>
 
 
