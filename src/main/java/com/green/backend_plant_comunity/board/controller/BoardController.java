@@ -32,13 +32,14 @@ public class BoardController {
       boardService.writeBoard(dtoList,boardDTO);
    }
 
+
    @GetMapping("/{memId}")
    //마이팜 게시글 조회 api
    public List<BoardDTO> getMyFarmCommunity(@PathVariable ("memId") String memId ){
       return boardService.getMyFarmCommunity(memId);
    }
 
-   @GetMapping("")
+   @GetMapping("/popular")
    //홈 화면 인기글 조회
    public List<BoardDTO> getPopularWriting(){
       return boardService.getPopularWriting();
