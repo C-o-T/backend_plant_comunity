@@ -5,10 +5,7 @@ import com.green.backend_plant_comunity.board.dto.BoardImgDTO;
 import com.green.backend_plant_comunity.board.service.BoardService;
 import com.green.backend_plant_comunity.util.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -32,5 +29,15 @@ public class BoardController {
       boardService.writeBoard(dtoList,boardDTO);
    }
 
+   @GetMapping("myfarm")
+   //마이팜 게시글 조회 api
+   public List<BoardDTO> getMyFarmCommunity(){
+      return boardService.getMyFarmCommunity();
+   }
 
+   @GetMapping("")
+   //홈 화면 인기글 조회
+   public List<BoardDTO> getPopularWriting(){
+      return boardService.getPopularWriting();
+   }
 }

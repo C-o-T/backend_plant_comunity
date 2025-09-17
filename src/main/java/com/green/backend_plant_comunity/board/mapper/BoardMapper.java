@@ -16,4 +16,10 @@ public interface BoardMapper {
 
    //BOARD 테이블에 데이터 삽입 시 저장되는 BOARD_NUM을 조회하는 쿼리
    public int getNextBoardNum();
+
+   //마이팜 게시글 조회
+   public List<BoardDTO> getMyFarmCommunity();
+
+   //홈 화면 인기글 조회
+   public List<BoardDTO> getPopularWriting();
 }
