@@ -29,8 +29,8 @@ public class BoardService {
    }
 
    //마이팜 게시글 조회
-   public List<BoardDTO> getMyFarmCommunity(){
-      return boardMapper.getMyFarmCommunity();
+   public List<BoardDTO> getMyFarmCommunity(String memId){
+      return boardMapper.getMyFarmCommunity(memId);
    }
 
    //홈 화면 인기글 조회
