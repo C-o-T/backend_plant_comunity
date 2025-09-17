@@ -6,23 +6,23 @@
 <mapper namespace="com.green.backend_plant_comunity.board.mapper.BoardMapper">
     <!--board-->
 	<resultMap id="board" type="com.green.backend_plant_comunity.board.dto.BoardDTO">
-        <id column="BOARD_NUM" property="boardNum"/>
-        <result column="TITLE" property="title"/>
-        <result column="CONTENT" property="content"/>
-        <result column="MEM_ID" property="memId"/>
-        <result column="CATE_NUM" property="herbNum"/>
-        <result column="READ_CNT" property="readCnt"/>
-        <result column="LIKE_CNT" property="likeCnt"/>
+        <id     column="BOARD_NUM"   property="boardNum"/>
+        <result column="TITLE"       property="title"/>
+        <result column="CONTENT"     property="content"/>
+        <result column="MEM_ID"      property="memId"/>
+        <result column="CATE_NUM"    property="cateNum"/>
+        <result column="READ_CNT"    property="readCnt"/>
+        <result column="LIKE_CNT"    property="likeCnt"/>
         <result column="DISLIKE_CNT" property="dislikeCnt"/>
         <result column="CREATE_DATE" property="createDate"/>
     </resultMap>
 
     <!--boardImg-->
     <resultMap id="boardImg" type="com.green.backend_plant_comunity.board.dto.BoardImgDTO">
-        <id column="IMG_NUM" property="imgNum"/>
-        <result column="ORIGIN_IMG_NAME" property="originImgName"/>
-        <result column="ATTACHED_IMG_NAME" property="attachedImgName"/>
-        <result column="BOARD_NUM" property="boardNum"/>
+        <id     column="IMG_NUM"            property="imgNum"/>
+        <result column="ORIGIN_IMG_NAME"    property="originImgName"/>
+        <result column="ATTACHED_IMG_NAME"  property="attachedImgName"/>
+        <result column="BOARD_NUM"          property="boardNum"/>
     </resultMap>
 
     <!--글쓸때 파일에 등록된 이미지 데이터베이스에 저장-->
@@ -61,7 +61,14 @@
 
     <!--홈 화면 인기글 조회-->
     <select id="getPopularWriting" resultMap="board">
-        SELECT BOARD_NUM, TITLE, MEM_ID, CATE_NUM, READ_CNT, LIKE_CNT, DISLIKE_CNT, CREATE_DATE
+        SELECT
+            BOARD_NUM,
+            TITLE, MEM_ID,
+            CATE_NUM,
+            READ_CNT,
+            LIKE_CNT,
+            DISLIKE_CNT,
+            CREATE_DATE
         FROM BOARD
         ORDER BY (LIKE_CNT + READ_CNT) DESC, CREATE_DATE DESC
         LIMIT 10
