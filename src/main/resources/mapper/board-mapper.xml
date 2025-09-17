@@ -53,23 +53,22 @@
     </insert>
     <!--BOARD 테이블에 데이터 삽입 시 저장되는 BOARD_NUM을 조회하는 쿼리-->
     <select id="getNextBoardNum" resultType="int">
-        SELECT IFNULL(MAX(BOARD_NUM), 0) + 1 FROM BOARD
+        SELECT IF NULL(MAX(BOARD_NUM), 0) + 1 FROM BOARD
     </select>
 
     <!--홈 화면 인기글 조회-->
-    <select id="getPopularWriting">
-        SELECT boardNum, title, memId, cateNum, readCnt, likeCnt, dislikeCnt, createDate, lastActivityDate
+    <select id="getPopularWriting" resultMap="board">
+        SELECT BOARD_NUM, TITLE, MEM_ID, CATE_NUM, READ_CNT, LIKE_CNT, DISLIKE_CNT, CREATE_DATE
         FROM BOARD
-        where BOOK_NUM = #{bookNum}
-        ORDER BY (likeCnt + readCnt) DESC, lastActivityDate DESC
+        ORDER BY (LIKE_CNT + READ_CNT) DESC, CREATE_DATE DESC
         LIMIT 10
     </select>
 
     <!--마이팜 게시글 조회-->
-    <select id="getMyFarmCommunity" resultMap="board">
-        SELECT boardNum, title, memId, cateNum, readCnt, likeCnt, dislikeCnt, createDate
+    <select id="getMyFarmWrite" resultMap="board">
+        SELECT BOARD_NUM, TITLE, MEM_ID, CATE_NUM, READ_CNT, LIKE_CNT, DISLIKE_CNT, CREATE_DATE
         FROM BOARD
-        WHERE BOOK_NUM = #{bookNum}
+        WHERE MEM_ID = #{memId}
     </select>
 </mapper>
 

@@ -18,7 +18,7 @@ public interface BoardMapper {
    public int getNextBoardNum();
 
    //마이팜 게시글 조회
-   public List<BoardDTO> getMyFarmCommunity();
+   public List<BoardDTO> getMyFarmCommunity(String memId);
 
    //홈 화면 인기글 조회
    public List<BoardDTO> getPopularWriting();

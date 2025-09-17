@@ -29,10 +29,10 @@ public class BoardController {
       boardService.writeBoard(dtoList,boardDTO);
    }
 
-   @GetMapping("myfarm")
+   @GetMapping("/{memId}")
    //마이팜 게시글 조회 api
-   public List<BoardDTO> getMyFarmCommunity(){
-      return boardService.getMyFarmCommunity();
+   public List<BoardDTO> getMyFarmCommunity(@PathVariable ("memId") String memId ){
+      return boardService.getMyFarmCommunity(memId);
    }
 
    @GetMapping("")
