@@ -5,17 +5,17 @@
 <!-- namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 적어주세요 -->
 <mapper namespace="com.green.backend_plant_comunity.member.mapper.MemberMapper">
 	<resultMap id="member" type="com.green.backend_plant_comunity.member.dto.MemberDTO">
-        <id     column="memId"              property="MEM_ID" />
-        <result column="memPw"              property="MEM_PW" />
-        <result column="memName"            property="MEM_NAME" />
-        <result column="memAddr"            property="MEM_ADDR" />
-        <result column="memDetailAddr"      property="MEM_DETAIL_ADDR" />
-        <result column="memTell"            property="MEM_TELL" />
-        <result column="memEmail"           property="MEM_EMAIL" />
-        <result column="memGrade"           property="MEM_GRADE" />
-        <result column="joinDate"           property="JOIN_DATE" />
-        <result column="memBusinessNum"     property="MEM_BUSINESS_NUM" />
-        <result column="memBusinessName"    property="MEM_BUSINESS_NAME" />
+        <id     column="MEM_ID"             property="memId" />
+        <result column="MEM_PW"             property="memPw" />
+        <result column="MEM_NAME"           property="memName" />
+        <result column="MEM_ADDR"           property="memAddr" />
+        <result column="MEM_DETAIL_ADDR"    property="memDetailAddr" />
+        <result column="MEM_TELL"           property="memTell" />
+        <result column="MEM_EMAIL"          property="memEmail" />
+        <result column="MEM_GRADE"          property="memGrade" />
+        <result column="JOIN_DATE"          property="joinDate" />
+        <result column="MEM_BUSINESS_NUM"   property="memBusinessNum" />
+        <result column="MEM_BUSINESS_NAME"  property="memBusinessName" />
     </resultMap>
 
     <!--회원가입 버튼 누르면 실행할 쿼리-->
@@ -28,6 +28,7 @@
             , MEM_DETAIL_ADDR
             , MEM_TELL
             , MEM_EMAIL
+            , MEM_GRADE
             , MEM_BUSINESS_NUM
             , MEM_BUSINESS_NAME
         ) VALUES (
@@ -38,6 +39,7 @@
             , #{memDetailAddr}
             , #{memTell}
             , #{memEmail}
+            , #{memGrade}
             , #{memBusinessNum}
             , #{memBusinessName}
         );
@@ -60,6 +62,19 @@
             member
         WHERE
             MEM_BUSINESS_NUM = #{memBusinessNum}
+    </select>
+    <!--아이디, 비밀번호 일치 조회-->
+    <select id="login" resultMap="member">
+        SELECT
+            MEM_ID
+            , MEM_NAME
+            , MEM_GRADE
+        FROM
+            MEMBER
+        WHERE
+            MEM_ID = #{memId}
+        AND
+            MEM_PW = #{memPw}
     </select>
 </mapper>
 

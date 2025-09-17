@@ -13,4 +13,7 @@ public interface MemberMapper {
 
   //사업자번호 중복검사
   public int checkBusinessNum(String memBusinessNum);
+
+  //로그인하기
+  public MemberDTO login (MemberDTO memberDTO);
 }

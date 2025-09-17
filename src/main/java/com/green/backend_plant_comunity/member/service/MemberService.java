@@ -25,4 +25,9 @@ public class MemberService {
   public int checkBusinessNum(String memBusinessNum){
     return memberMapper.checkBusinessNum(memBusinessNum);
   }
+
+  //로그인하기
+  public MemberDTO login (MemberDTO memberDTO) {
+    return memberMapper.login(memberDTO);
+  }
 }

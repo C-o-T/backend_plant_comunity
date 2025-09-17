@@ -28,4 +28,10 @@ public class MemberController {
   public int checkBusinessNum(@PathVariable("memBusinessNum") String memBusinessNum) {
     return memberService.checkBusinessNum(memBusinessNum);
   }
+
+  //로그인하기
+  @GetMapping("/login")
+  public MemberDTO login (MemberDTO memberDTO) {
+    return memberService.login(memberDTO);
+  }
 }
