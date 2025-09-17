@@ -26,6 +26,15 @@ public class BoardService {
 
       boardMapper.writeBoard(boardDTO);
       boardMapper.writeImg(imgList);
+   }
 
+   //마이팜 게시글 조회
+   public List<BoardDTO> getMyFarmCommunity(){
+      return boardMapper.getMyFarmCommunity();
+   }
+
+   //홈 화면 인기글 조회
+   public List<BoardDTO> getPopularWriting(){
+      return boardMapper.getPopularWriting();
    }
 }
