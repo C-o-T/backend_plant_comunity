@@ -1,5 +1,6 @@
 package com.green.backend_plant_comunity.member.service;
 
+import com.green.backend_plant_comunity.board.mapper.BoardMapper;
 import com.green.backend_plant_comunity.member.dto.MemberDTO;
 import com.green.backend_plant_comunity.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
@@ -30,4 +31,10 @@ public class MemberService {
   public MemberDTO login (MemberDTO memberDTO) {
     return memberMapper.login(memberDTO);
   }
+
+  //my page 화면 에서 회원정보 조회
+  public MemberDTO getMemberDetail(String memId){
+    return memberMapper.getMemberDetail(memId);
+  }
+
 }
