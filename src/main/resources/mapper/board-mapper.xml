@@ -10,7 +10,7 @@
         <result column="TITLE"       property="title"/>
         <result column="CONTENT"     property="content"/>
         <result column="MEM_ID"      property="memId"/>
-        <result column="CATE_NUM"    property="cateNum"/>
+        <result column="CATE_NUM"    property="herbNum"/>
         <result column="READ_CNT"    property="readCnt"/>
         <result column="LIKE_CNT"    property="likeCnt"/>
         <result column="DISLIKE_CNT" property="dislikeCnt"/>
