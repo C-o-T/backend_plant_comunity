@@ -16,4 +16,9 @@ public interface MemberMapper {
 
   //로그인하기
   public MemberDTO login (MemberDTO memberDTO);
+
+  //my page 화면 에서 회원정보 조회
+  public MemberDTO getMemberDetail(String memId);
+
+
 }

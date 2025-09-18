@@ -34,4 +34,11 @@ public class MemberController {
   public MemberDTO login (MemberDTO memberDTO) {
     return memberService.login(memberDTO);
   }
+
+  //my page 화면 에서 회원정보 조회
+  @GetMapping("/{memId}")
+  public MemberDTO getMemberDetail(@PathVariable("memId") String memId){
+    return memberService.getMemberDetail(memId);
+  }
+
 }
