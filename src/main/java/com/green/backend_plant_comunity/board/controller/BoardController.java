@@ -39,7 +39,7 @@ public class BoardController {
       return boardService.getMyFarmCommunity(memId);
    }
 
-   @GetMapping("/popular")
+   @GetMapping("")
    //홈 화면 인기글 조회
    public List<BoardDTO> getPopularWriting(){
       return boardService.getPopularWriting();

@@ -76,6 +76,25 @@
         AND
             MEM_PW = #{memPw}
     </select>
+
+    <!--my page 화면 에서 회원정보 조회-->
+    <select id="getMemberDetail" resultMap="member">
+        SELECT
+            MEM_ID
+            , MEM_PW
+            , MEM_NAME
+            , MEM_ADDR
+            , MEM_DETAIL_ADDR
+            , MEM_TELL
+            , MEM_EMAIL
+            , MEM_GRADE
+            , MEM_BUSINESS_NUM
+            , MEM_BUSINESS_NAME
+        FROM MEMBER
+        WHERE MEM_ID = #{memId}
+    </select>
+
+
 </mapper>
 
 
