@@ -1,5 +1,6 @@
 package com.green.backend_plant_comunity.environment.dto;
 
+import com.green.backend_plant_comunity.member.dto.MemberDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -12,5 +13,6 @@ public class EnvironmentDTO {
   private float humidity;  //습도
   private int illuminance;  //조도
   private float soilMoisture; //토양습도
-
+  private int herbNum; //작물 별 번호
+  private MemberDTO memberDTO;
 }

@@ -41,6 +41,7 @@ public class MemberController {
     return memberService.login(memberDTO);
   }
 
+
   //아이디찾기
   @GetMapping("findId")
   public MemberDTO findId (MemberDTO memberDTO) {
@@ -52,4 +53,12 @@ public class MemberController {
   public MemberDTO findPw (MemberDTO memberDTO) {
     return memberService.findPw(memberDTO);
   }
+
+  //my page 화면 에서 회원정보 조회
+  @GetMapping("/{memId}")
+  public MemberDTO getMemberDetail(@PathVariable("memId") String memId){
+    return memberService.getMemberDetail(memId);
+  }
+
+
 }
