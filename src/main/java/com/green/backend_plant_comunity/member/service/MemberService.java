@@ -21,6 +21,12 @@ public class MemberService {
     return memberMapper.checkId(memId);
   }
 
+  //회원아이디 중복검사
+  public int checkTell(String memTell){
+
+    return memberMapper.checkTell(memTell);
+  }
+
   //사업자번호 중복검사
   public int checkBusinessNum(String memBusinessNum){
     return memberMapper.checkBusinessNum(memBusinessNum);
@@ -29,5 +35,15 @@ public class MemberService {
   //로그인하기
   public MemberDTO login (MemberDTO memberDTO) {
     return memberMapper.login(memberDTO);
+  }
+
+  //아이디찾기
+  public MemberDTO findId (MemberDTO memberDTO) {
+    return memberMapper.findId(memberDTO);
+  }
+
+  //비밀번호찾기
+  public MemberDTO findPw (MemberDTO memberDTO) {
+    return memberMapper.findPw(memberDTO);
   }
 }

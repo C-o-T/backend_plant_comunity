@@ -23,6 +23,12 @@ public class MemberController {
     return memberService.checkId(memId);
   }
 
+  //회원연락처 중복검사 버튼 누르면 실행할 api
+  @GetMapping("/tell/{memTell}")
+  public int checkTell(@PathVariable("memTell") String memTell) {
+    return memberService.checkTell(memTell);
+  }
+
   //사업자번호 중복검사 버튼 누르면 실행할 api
   @GetMapping("/bn/{memBusinessNum}")
   public int checkBusinessNum(@PathVariable("memBusinessNum") String memBusinessNum) {
@@ -33,5 +39,17 @@ public class MemberController {
   @GetMapping("/login")
   public MemberDTO login (MemberDTO memberDTO) {
     return memberService.login(memberDTO);
+  }
+
+  //아이디찾기
+  @GetMapping("findId")
+  public MemberDTO findId (MemberDTO memberDTO) {
+    return memberService.findId(memberDTO);
+  }
+
+  //비밀번호찾기
+  @GetMapping("findPw")
+  public MemberDTO findPw (MemberDTO memberDTO) {
+    return memberService.findPw(memberDTO);
   }
 }
