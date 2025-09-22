@@ -37,4 +37,9 @@ public class BoardService {
    public List<BoardDTO> getPopularWriting(){
       return boardMapper.getPopularWriting();
    }
+
+   //url 데이터베이스에 삽입
+   public void insertUrl(List<BoardImgDTO> boardImgDTO){
+      boardMapper.insertUrl(boardImgDTO);
+   }
 }

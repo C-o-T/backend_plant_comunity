@@ -20,11 +20,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/boards")
 public class BoardController {
    private final BoardService boardService;
+
    @PostMapping("/upload/img")
    public ResponseEntity<?> uploadImg(@RequestParam("img") List<MultipartFile> imgs){
       List<BoardImgDTO> dtoList = FileUploadUtil.fileUpload(imgs);
-
       List<String> imageUrl = dtoList.stream().map(img -> "http://localhost:8080/upload/" + img.getAttachedImgName()).collect(Collectors.toList());
+      boardService.insertUrl(dtoList);
       return ResponseEntity.ok(imageUrl);
    }
 

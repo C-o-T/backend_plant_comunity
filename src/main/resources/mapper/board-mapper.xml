@@ -23,6 +23,8 @@
         <result column="ORIGIN_IMG_NAME"    property="originImgName"/>
         <result column="ATTACHED_IMG_NAME"  property="attachedImgName"/>
         <result column="BOARD_NUM"          property="boardNum"/>
+        <result column="IMG_URL" property="imgUrl"/>
+        <result column="USED" property="used"/>
     </resultMap>
 
     <!--글쓸때 파일에 등록된 이미지 데이터베이스에 저장-->
@@ -80,5 +82,17 @@
         FROM BOARD
         WHERE MEM_ID = #{memId}
     </select>
+
+    <insert id="insertUrl">
+        INSERT INTO BOARD_IMG(
+            ORIGIN_IMG_NAME
+            , ATTACHED_IMG_NAME
+            , IMG_URL
+        )VALUES(
+            #{originImgName}
+            , #{attachedImgName}
+            , #{imgUrl}
+        )
+    </insert>
 </mapper>
 

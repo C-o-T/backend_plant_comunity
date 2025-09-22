@@ -8,4 +8,6 @@ public class BoardImgDTO {
    private String originImgName;
    private String attachedImgName;
    private int boardNum;
+   private String imgUrl;
+   private boolean used;
 }
