@@ -88,11 +88,10 @@
             ORIGIN_IMG_NAME
             , ATTACHED_IMG_NAME
             , IMG_URL
-        )VALUES(
-            #{originImgName}
-            , #{attachedImgName}
-            , #{imgUrl}
-        )
+        )VALUES
+        <foreach collection="imgList" item="boardImg" separator=",">
+            (#{boardImg.originImgName},#{boardImg.attachedImgName},#{boardImg.imgUrl})
+        </foreach>
     </insert>
 </mapper>
 

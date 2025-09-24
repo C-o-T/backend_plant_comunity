@@ -25,21 +25,16 @@ public class BoardController {
    public ResponseEntity<?> uploadImg(@RequestParam("img") List<MultipartFile> imgs){
       List<BoardImgDTO> dtoList = FileUploadUtil.fileUpload(imgs);
       List<String> imageUrl = dtoList.stream().map(img -> "http://localhost:8080/upload/" + img.getAttachedImgName()).collect(Collectors.toList());
+      for(BoardImgDTO dto : dtoList){
+         dto.setImgUrl("http://localhost:8080/upload/" + dto.getAttachedImgName());
+      }
       boardService.insertUrl(dtoList);
       return ResponseEntity.ok(imageUrl);
    }
 
    @PostMapping("")
-   public void writeImg(@RequestParam(name = "img", required = false) List<MultipartFile> imgs, BoardDTO boardDTO) {
-      if(imgs == null){
-         imgs = new ArrayList<>();
-      }
-      //Arrays.asList(imgs).stream().forEach(img -> System.out.println(img.getSize()));
-
-
-      List<BoardImgDTO> dtoList = FileUploadUtil.fileUpload(imgs);
-
-      boardService.writeBoard(dtoList,boardDTO);
+   public void writeImg(@RequestBody BoardDTO boardDTO) {
+      boardService.writeBoard(boardDTO);
    }
 
 

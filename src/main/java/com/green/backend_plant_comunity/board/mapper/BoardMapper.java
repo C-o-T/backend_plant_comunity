@@ -24,5 +24,5 @@ public interface BoardMapper {
    public List<BoardDTO> getPopularWriting();
 
    //url 데이터베이스에 삽입
-   public void insertUrl(List<BoardImgDTO> boardImgDTO);
+   public void insertUrl(List<BoardImgDTO> imgList);
 }
