@@ -6,6 +6,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+
    @Override
    public void addResourceHandlers(ResourceHandlerRegistry registry) {
       // 실제 업로드 폴더의 절대 경로

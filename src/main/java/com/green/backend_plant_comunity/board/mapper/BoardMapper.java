@@ -8,8 +8,6 @@ import java.util.List;
 
 @Mapper
 public interface BoardMapper {
-    //글쓸때 파일에 등록된 이미지 데이터베이스에 저장
-   public void writeImg(List<BoardImgDTO> imgList);
 
    //글쓰기 등록
    public void writeBoard(BoardDTO boardDTO);
@@ -25,4 +23,11 @@ public interface BoardMapper {
 
    //url 데이터베이스에 삽입
    public void insertUrl(List<BoardImgDTO> imgList);
+
+   //글쓸때 이미지 글번호와 일치 시키고 이미지 사용 확인
+   public void updateImg(BoardImgDTO boardImgDTO);
+
+   public List<BoardImgDTO> getUnusedImg();
+
+   public int deleteUnusedImg(int imgNum);
 }

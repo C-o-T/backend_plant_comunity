@@ -28,20 +28,15 @@
         <result column="USED" property="used"/>
     </resultMap>
 
-    <!--글쓸때 파일에 등록된 이미지 데이터베이스에 저장-->
+    <!--글쓸때 이미지 글번호와 일치 시키고 이미지 사용 확인-->
+    <update id="updateImg">
+        UPDATE BOARD_IMG
+            SET
+                BOARD_NUM = #{boardNum},
+                USED = #{used}
+        WHERE IMG_URL = #{imgUrl}
+    </update>
 
-    <insert id="writeImg">
-        <if test="imgList != null and imgList.size() > 0">
-            INSERT INTO BOARD_IMG(
-            ORIGIN_IMG_NAME
-            , ATTACHED_IMG_NAME
-            , BOARD_NUM
-            )VALUES
-            <foreach collection="imgList" item="boardImg" separator=",">
-                (#{boardImg.originImgName}, #{boardImg.attachedImgName}, #{boardImg.boardNum})
-            </foreach>
-        </if>
-    </insert>
 
     <!--글쓰기 등록-->
     <insert id="writeBoard">
@@ -57,6 +52,7 @@
             , #{cateNum}
         )
     </insert>
+
     <!--BOARD 테이블에 데이터 삽입 시 저장되는 BOARD_NUM을 조회하는 쿼리-->
     <select id="getNextBoardNum" resultType="int">
         SELECT IFNULL(MAX(BOARD_NUM), 0) + 1 FROM BOARD
@@ -84,6 +80,7 @@
         WHERE MEM_ID = #{memId}
     </select>
 
+    <!--파일선택시 url 데이터 베이스에 저장-->
     <insert id="insertUrl">
         INSERT INTO BOARD_IMG(
             ORIGIN_IMG_NAME
@@ -94,5 +91,24 @@
             (#{boardImg.originImgName},#{boardImg.attachedImgName},#{boardImg.imgUrl})
         </foreach>
     </insert>
+
+    <!--사용하지 않는 이미지 조회-->
+    <select id="getUnusedImg" resultMap="boardImg">
+        SELECT
+                IMG_NUM
+                , ORIGIN_IMG_NAME
+                , ATTACHED_IMG_NAME
+                , IMG_URL
+                , USED
+        FROM BOARD_IMG
+        WHERE USED = FALSE
+    </select>
+
+    <!--사용하지 않는 이미지 삭제-->
+    <delete id="deleteUnusedImg">
+        DELETE FROM BOARD_IMG
+        WHERE IMG_NUM = #{imgNum}
+    </delete>
+
 </mapper>
 
