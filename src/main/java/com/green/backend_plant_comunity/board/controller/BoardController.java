@@ -33,7 +33,7 @@ public class BoardController {
    }
 
    @PostMapping("")
-   public void writeImg(@RequestBody BoardDTO boardDTO) {
+   public void writeBoard(@RequestBody BoardDTO boardDTO) {
       boardService.writeBoard(boardDTO);
    }
 
