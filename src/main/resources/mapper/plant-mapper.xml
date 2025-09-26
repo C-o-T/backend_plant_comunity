@@ -5,22 +5,24 @@
 <!-- namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 적어주세요 -->
 <mapper namespace="com.green.backend_plant_comunity.plant.mapper.PlantMapper">
 	<resultMap id="plant" type="com.green.backend_plant_comunity.plant.dto.PlantDTO">
-        <id     column="HERB_NUM"             property="herbNum" />
-        <result column="TEMP_MIN"             property="tempMin" />
-        <result column="TEMP_MAX"           property="tempMax" />
-        <result column="HUMID_MIN"           property="humidMin" />
-        <result column="HUMID_MAX"    property="humidMax" />
-        <result column="SOIL_MIN"           property="soilMin" />
-        <result column="SOIL_MAX"          property="soilMax" />
-        <result column="LUX_MIN"          property="luxMin" />
-        <result column="LUX_MAX"          property="luxMax" />
-        <result column="IMG_URL"   property="imgUrl" />
+        <id     column="HERB_NUM"   property="herbNum" />
+        <result column="HERB_NAME"  property="herbName" />
+        <result column="TEMP_MIN"   property="tempMin" />
+        <result column="TEMP_MAX"   property="tempMax" />
+        <result column="HUMID_MIN"  property="humidMin" />
+        <result column="HUMID_MAX"  property="humidMax" />
+        <result column="SOIL_MIN"   property="soilMin" />
+        <result column="SOIL_MAX"   property="soilMax" />
+        <result column="LUX_MIN"    property="luxMin" />
+        <result column="LUX_MAX"    property="luxMax" />
+        <result column="IMG_NAME"   property="imgName" />
     </resultMap>
 
-
+    <!--식물 리스트 조회-->
     <select id="getPlantList" resultMap="plant">
         SELECT
             HERB_NUM
+            , HERB_NAME
             , TEMP_MIN
             , TEMP_MAX
             , HUMID_MIN
@@ -29,7 +31,7 @@
             , SOIL_MAX
             , LUX_MIN
             , LUX_MAX
-            , IMG_URL
+            , IMG_NAME
         FROM CROP_STANDARDS
     </select>
 
