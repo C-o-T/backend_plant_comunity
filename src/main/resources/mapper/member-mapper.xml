@@ -149,6 +149,13 @@
         WHERE MEM_ID = #{memId}
     </select>
 
+    <!--admin 페이지에서 단일 회원 삭제-->
+    <delete id="deleteMemberByAdmin" parameterType="string">
+        DELETE
+        FROM MEMBER
+        WHERE MEM_ID = #{memId}
+    </delete>
+
 </mapper>
 
 

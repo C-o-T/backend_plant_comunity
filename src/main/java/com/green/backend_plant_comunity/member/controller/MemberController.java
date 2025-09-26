@@ -60,5 +60,9 @@ public class MemberController {
     return memberService.getMemberDetail(memId);
   }
 
-
+  // admin 페이지에서 단일 회원 삭제
+  @DeleteMapping("/{memId}")
+  public int deleteMember(@PathVariable("memId") String memId) {
+    return memberService.deleteMemberByAdmin(memId);
+  }
 }

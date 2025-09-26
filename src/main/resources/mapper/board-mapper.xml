@@ -110,5 +110,11 @@
         WHERE IMG_NUM = #{imgNum}
     </delete>
 
+    <!-- admin 단일 게시글 삭제-->
+    <delete id="deleteBoardByAdmin">
+        DELETE
+        FROM BOARD
+        WHERE BOARD_NUM = #{boardNum}
+    </delete>
 </mapper>
 

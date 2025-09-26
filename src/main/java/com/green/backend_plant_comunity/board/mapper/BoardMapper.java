@@ -30,4 +30,7 @@ public interface BoardMapper {
    public List<BoardImgDTO> getUnusedImg();
 
    public int deleteUnusedImg(int imgNum);
+
+   //admin 페이지 게시글 삭제 기능
+   public int deleteBoardByAdmin(int boardNum);
 }
