@@ -13,7 +13,7 @@
         <result column="SOIL_MOISTURE"    property="soilMoisture" />
         <result column="HERB_NUM"    property="herbNum" />
         <result column="HERB_NAME"    property="herbName" />
-        <association property="memberDTO" resultMap="com.green.backend_plant_comunity.member.dto.MemberDTO" />
+        <association property="memberDTO" resultMap="com.green.backend_plant_comunity.member.mapper.MemberMapper.member" />
     </resultMap>
 
     <resultMap id="standards" type="com.green.backend_plant_comunity.environment.dto.StandardsDTO">
