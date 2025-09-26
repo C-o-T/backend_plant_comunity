@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<!-- namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 적어주세요 -->
+<mapper namespace="com.green.backend_plant_comunity.plant.mapper.PlantMapper">
+	<resultMap id="plant" type="com.green.backend_plant_comunity.plant.dto.PlantDTO">
+        <id     column="HERB_NUM"             property="herbNum" />
+        <result column="TEMP_MIN"             property="tempMin" />
+        <result column="TEMP_MAX"           property="tempMax" />
+        <result column="HUMID_MIN"           property="humidMin" />
+        <result column="HUMID_MAX"    property="humidMax" />
+        <result column="SOIL_MIN"           property="soilMin" />
+        <result column="SOIL_MAX"          property="soilMax" />
+        <result column="LUX_MIN"          property="luxMin" />
+        <result column="LUX_MAX"          property="luxMax" />
+        <result column="IMG_URL"   property="imgUrl" />
+    </resultMap>
+
+
+    <select id="getPlantList" resultMap="plant">
+        SELECT
+            HERB_NUM
+            , TEMP_MIN
+            , TEMP_MAX
+            , HUMID_MIN
+            , HUMID_MAX
+            , SOIL_MIN
+            , SOIL_MAX
+            , LUX_MIN
+            , LUX_MAX
+            , IMG_URL
+        FROM CROP_STANDARDS
+    </select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
