@@ -11,7 +11,7 @@ import java.util.UUID;
 public class FileUploadUtil {
    public static List<BoardImgDTO> fileUpload(List<MultipartFile> imgs) {
       //파일경로 지정
-      String uploadPath = "D:\\01-STUDY\\dev\\team\\backend_plant_comunity\\src\\main\\resources\\static\\upload\\";
+      String uploadPath = "D:\\01-STUDY\\dev\\team\\upload\\";
 
       // 2) 파일명 중복방지를 위해 업로드를 파일명을 세팅
       // ex> 원본 파일명 : java.jpg  -> fgfsdgdfgffefef.jpg

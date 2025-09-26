@@ -15,17 +15,11 @@ public class BoardService {
    private final BoardMapper boardMapper;
 
    @Transactional(rollbackFor = Exception.class)
-   public void writeBoard(List<BoardImgDTO> imgList, BoardDTO boardDTO){
+   public void writeBoard(BoardDTO boardDTO){
       int nextBoardNum = boardMapper.getNextBoardNum();
 
       boardDTO.setBoardNum(nextBoardNum);
       boardMapper.writeBoard(boardDTO);
-      if(imgList != null && !imgList.isEmpty()) {
-         for (BoardImgDTO dto : imgList) {
-            dto.setBoardNum(nextBoardNum);
-         }
-         boardMapper.writeImg(imgList);
-      }
    }
 
    //마이팜 게시글 조회
@@ -36,5 +30,10 @@ public class BoardService {
    //홈 화면 인기글 조회
    public List<BoardDTO> getPopularWriting(){
       return boardMapper.getPopularWriting();
+   }
+
+   //url 데이터베이스에 삽입
+   public void insertUrl(List<BoardImgDTO> imgList){
+      boardMapper.insertUrl(imgList);
    }
 }

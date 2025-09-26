@@ -5,6 +5,7 @@ import com.green.backend_plant_comunity.board.dto.BoardImgDTO;
 import com.green.backend_plant_comunity.board.service.BoardService;
 import com.green.backend_plant_comunity.util.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,17 +21,20 @@ import java.util.Map;
 public class BoardController {
    private final BoardService boardService;
 
-   @PostMapping("")
-   public void writeImg(@RequestParam(name = "img", required = false) List<MultipartFile> imgs, BoardDTO boardDTO) {
-      if(imgs == null){
-         imgs = new ArrayList<>();
-      }
-      //Arrays.asList(imgs).stream().forEach(img -> System.out.println(img.getSize()));
-
-
+   @PostMapping("/upload/img")
+   public ResponseEntity<?> uploadImg(@RequestParam("img") List<MultipartFile> imgs){
       List<BoardImgDTO> dtoList = FileUploadUtil.fileUpload(imgs);
+      List<String> imageUrl = dtoList.stream().map(img -> "http://localhost:8080/upload/" + img.getAttachedImgName()).collect(Collectors.toList());
+      for(BoardImgDTO dto : dtoList){
+         dto.setImgUrl("http://localhost:8080/upload/" + dto.getAttachedImgName());
+      }
+      boardService.insertUrl(dtoList);
+      return ResponseEntity.ok(imageUrl);
+   }
 
-      boardService.writeBoard(dtoList,boardDTO);
+   @PostMapping("")
+   public void writeImg(@RequestBody BoardDTO boardDTO) {
+      boardService.writeBoard(boardDTO);
    }
 
 
