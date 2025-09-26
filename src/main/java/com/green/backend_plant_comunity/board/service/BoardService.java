@@ -55,4 +55,9 @@ public class BoardService {
    public void insertUrl(List<BoardImgDTO> imgList){
       boardMapper.insertUrl(imgList);
    }
+
+   //게시글 목록 조회
+   public List<BoardDTO> getBoardList(){
+      return boardMapper.getBoardList();
+   }
 }

@@ -16,6 +16,7 @@
         <result column="LIKE_CNT"    property="likeCnt"/>
         <result column="DISLIKE_CNT" property="dislikeCnt"/>
         <result column="CREATE_DATE" property="createDate"/>
+        <collection property="imgList" resultMap="boardImg"/>
     </resultMap>
 
     <!--boardImg-->
@@ -109,6 +110,21 @@
         DELETE FROM BOARD_IMG
         WHERE IMG_NUM = #{imgNum}
     </delete>
+
+    <!--게시글 목록 조회-->
+    <select id="getBoardList" resultMap="board">
+        SELECT
+              B.BOARD_NUM
+            , CATE_NUM
+            , TITLE
+            , READ_CNT
+            , LIKE_CNT
+            , DISLIKE_CNT
+            , (SELECT IMG_URL FROM BOARD_IMG WHERE BOARD_NUM = B.BOARD_NUM ORDER BY IMG_NUM LIMIT 1) AS IMG_URL
+        FROM BOARD B LEFT JOIN BOARD_IMG I
+        ON B.BOARD_NUM = I.BOARD_NUM
+        ORDER BY CREATE_DATE DESC
+    </select>
 
 </mapper>
 
