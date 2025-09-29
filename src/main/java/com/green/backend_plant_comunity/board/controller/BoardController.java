@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/boards")
 public class BoardController {
    private final BoardService boardService;
-
+   //게시글 등록할때 url 미리등록
    @PostMapping("/upload/img")
    public ResponseEntity<?> uploadImg(@RequestParam("img") List<MultipartFile> imgs){
       List<BoardImgDTO> dtoList = FileUploadUtil.fileUpload(imgs);
@@ -32,6 +32,7 @@ public class BoardController {
       return ResponseEntity.ok(imageUrl);
    }
 
+   // 게시글 등록
    @PostMapping("")
    public void writeBoard(@RequestBody BoardDTO boardDTO) {
       boardService.writeBoard(boardDTO);
@@ -49,7 +50,7 @@ public class BoardController {
    public List<BoardDTO> getPopularWriting(){
       return boardService.getPopularWriting();
    }
-
+   //게시글 목록 조회
    @GetMapping("/boardList")
    public List<BoardDTO> getBoardList(){
       return boardService.getBoardList();

@@ -42,12 +42,14 @@
     <!--글쓰기 등록-->
     <insert id="writeBoard">
         INSERT INTO BOARD(
-            TITLE
+              BOARD_NUM
+            , TITLE
             , CONTENT
             , MEM_ID
             , CATE_NUM
         )VALUES(
-            #{title}
+              #{boardNum}
+            , #{title}
             , #{content}
             , #{memId}
             , #{cateNum}
@@ -115,6 +117,8 @@
     <select id="getBoardList" resultMap="board">
         SELECT
               B.BOARD_NUM
+            , MEM_ID
+            , CONTENT
             , CATE_NUM
             , TITLE
             , READ_CNT

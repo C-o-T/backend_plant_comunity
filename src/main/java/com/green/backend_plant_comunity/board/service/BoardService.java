@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
    private final BoardMapper boardMapper;
-
+   //게시글 등록
    @Transactional(rollbackFor = Exception.class)
    public void writeBoard(BoardDTO boardDTO){
       BoardImgDTO boardImgDTO = new BoardImgDTO();
