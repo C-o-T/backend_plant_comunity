@@ -49,9 +49,4 @@ public class BoardController {
    public List<BoardDTO> getPopularWriting(){
       return boardService.getPopularWriting();
    }
-
-   @GetMapping("/boardList")
-   public List<BoardDTO> getBoardList(){
-      return boardService.getBoardList();
-   }
 }

@@ -14,6 +14,4 @@ public class BoardDTO {
    private int likeCnt;
    private int dislikeCnt;
    private LocalDateTime createDate;
-
-   private BoardImgDTO imgList;
 }

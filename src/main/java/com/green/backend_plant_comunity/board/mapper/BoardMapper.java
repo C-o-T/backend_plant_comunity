@@ -27,12 +27,7 @@ public interface BoardMapper {
    //글쓸때 이미지 글번호와 일치 시키고 이미지 사용 확인
    public void updateImg(BoardImgDTO boardImgDTO);
 
-   //쓰지않는 이미지리스트 조회
    public List<BoardImgDTO> getUnusedImg();
 
-   //사용하지 않는 이미지 삭제
    public int deleteUnusedImg(int imgNum);
-
-   //게시글 목록 조회
-   public List<BoardDTO> getBoardList();
 }
