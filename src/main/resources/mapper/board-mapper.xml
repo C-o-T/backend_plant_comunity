@@ -111,6 +111,7 @@
         WHERE IMG_NUM = #{imgNum}
     </delete>
 
+<<<<<<< HEAD
     <!--게시글 목록 조회-->
     <select id="getBoardList" resultMap="board">
         SELECT
@@ -126,5 +127,13 @@
         ORDER BY CREATE_DATE DESC
     </select>
 
+=======
+    <!-- admin 단일 게시글 삭제-->
+    <delete id="deleteBoardByAdmin">
+        DELETE
+        FROM BOARD
+        WHERE BOARD_NUM = #{boardNum}
+    </delete>
+>>>>>>> fea/admin_member
 </mapper>
 

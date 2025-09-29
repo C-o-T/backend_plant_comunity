@@ -56,8 +56,14 @@ public class BoardService {
       boardMapper.insertUrl(imgList);
    }
 
+<<<<<<< HEAD
    //게시글 목록 조회
    public List<BoardDTO> getBoardList(){
       return boardMapper.getBoardList();
+=======
+   // admin 페이지 단일 게시글 삭제
+   public int deleteBoardByAdmin(int boardNum) {
+      return boardMapper.deleteBoardByAdmin(boardNum);
+>>>>>>> fea/admin_member
    }
 }

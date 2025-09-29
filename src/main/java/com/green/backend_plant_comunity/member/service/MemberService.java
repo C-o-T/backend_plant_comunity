@@ -54,5 +54,8 @@ public class MemberService {
     return memberMapper.getMemberDetail(memId);
   }
 
-
+  // admin 페이지에서 단일 회원 삭제
+  public int deleteMemberByAdmin(String memId) {
+    return memberMapper.deleteMemberByAdmin(memId);
+  }
 }

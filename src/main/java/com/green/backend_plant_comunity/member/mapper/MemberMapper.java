@@ -30,6 +30,7 @@ public interface MemberMapper {
   //my page 화면 에서 회원정보 조회
   public MemberDTO getMemberDetail(String memId);
 
-
+  // admin 페이지에서 단일 회원 삭제
+  public int deleteMemberByAdmin(String memId);
 
 }
