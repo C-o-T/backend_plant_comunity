@@ -49,16 +49,4 @@ public class BoardController {
    public List<BoardDTO> getPopularWriting(){
       return boardService.getPopularWriting();
    }
-
-<<<<<<< HEAD
-   @GetMapping("/boardList")
-   public List<BoardDTO> getBoardList(){
-      return boardService.getBoardList();
-=======
-   // admin 페이지 단일 게시글 삭제
-   @DeleteMapping("/{boardNum}")
-   public int deleteBoardByAdmin(@PathVariable("boardNum") int boardNum) {
-      return boardService.deleteBoardByAdmin(boardNum);
->>>>>>> fea/admin_member
-   }
 }
