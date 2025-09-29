@@ -55,4 +55,9 @@ public class BoardService {
    public void insertUrl(List<BoardImgDTO> imgList){
       boardMapper.insertUrl(imgList);
    }
+
+   // admin 페이지 단일 게시글 삭제
+   public int deleteBoardByAdmin(int boardNum) {
+      return boardMapper.deleteBoardByAdmin(boardNum);
+   }
 }
