@@ -3,6 +3,8 @@ package com.green.backend_plant_comunity.member.mapper;
 import com.green.backend_plant_comunity.member.dto.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface MemberMapper {
   //회원가입
@@ -30,7 +32,9 @@ public interface MemberMapper {
   //my page 화면 에서 회원정보 조회
   public MemberDTO getMemberDetail(String memId);
 
-  // admin 페이지에서 단일 회원 삭제
-  public int deleteMemberByAdmin(String memId);
+  // [관리자] 전체 회원 목록 조회
+  public List<com.green.backend_plant_comunity.member.model.MemberRes> selAllMembers();
 
+  // [관리자] 회원 삭제
+  public int deleteMemberByAdmin(String memId);
 }

@@ -51,6 +51,11 @@ public class BoardService {
       return boardMapper.getPopularWriting();
    }
 
+   //전체 게시글 조회
+   public List<BoardDTO> getBoardList(){
+      return boardMapper.getBoardList();
+   }
+
    //url 데이터베이스에 삽입
    public void insertUrl(List<BoardImgDTO> imgList){
       boardMapper.insertUrl(imgList);

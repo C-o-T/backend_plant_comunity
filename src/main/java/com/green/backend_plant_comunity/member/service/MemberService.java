@@ -6,6 +6,8 @@ import com.green.backend_plant_comunity.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -54,8 +56,13 @@ public class MemberService {
     return memberMapper.getMemberDetail(memId);
   }
 
-  // admin 페이지에서 단일 회원 삭제
-  public int deleteMemberByAdmin(String memId) {
-    return memberMapper.deleteMemberByAdmin(memId);
+  // [관리자] 전체 회원 목록 조회
+  public List<com.green.backend_plant_comunity.member.model.MemberRes> getAllMembers() {
+    return memberMapper.selAllMembers();
+  }
+
+  // [관리자] 회원 삭제
+  public int deleteMemberByAdmin(String memberId) {
+    return memberMapper.deleteMemberByAdmin(memberId);
   }
 }
