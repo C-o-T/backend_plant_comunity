@@ -61,5 +61,4 @@ public class BoardController {
    public int deleteBoardByAdmin(@PathVariable("boardNum") int boardNum) {
       return boardService.deleteBoardByAdmin(boardNum);
    }
-
 }
