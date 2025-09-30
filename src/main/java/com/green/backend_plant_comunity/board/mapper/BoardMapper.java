@@ -22,17 +22,21 @@ public interface BoardMapper {
    //홈 화면 인기글 조회
    public List<BoardDTO> getPopularWriting();
 
+   //전체 게시글 조회
+   public List<BoardDTO> getBoardList();
+
    //url 데이터베이스에 삽입
    public void insertUrl(List<BoardImgDTO> imgList);
 
    //글쓸때 이미지 글번호와 일치 시키고 이미지 사용 확인
    public void updateImg(BoardImgDTO boardImgDTO);
 
-   //쓰지않는 이미지리스트 조회
    public List<BoardImgDTO> getUnusedImg();
 
-   //사용하지 않는 이미지 삭제
    public int deleteUnusedImg(int imgNum);
+
+   //admin 페이지 게시글 삭제 기능
+   public int deleteBoardByAdmin(int boardNum);
 
    //게시글 목록 조회
    public List<BoardDTO> getBoardList(BoardDTO boardDTO);

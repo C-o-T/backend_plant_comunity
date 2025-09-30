@@ -3,7 +3,10 @@ package com.green.backend_plant_comunity.member.controller;
 import com.green.backend_plant_comunity.member.dto.MemberDTO;
 import com.green.backend_plant_comunity.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("members")
@@ -60,5 +63,16 @@ public class MemberController {
     return memberService.getMemberDetail(memId);
   }
 
+  @GetMapping("/admin")
+  public ResponseEntity<List<com.green.backend_plant_comunity.member.model.MemberRes>> getAllMembers() {
+    List<com.green.backend_plant_comunity.member.model.MemberRes> members = memberService.getAllMembers();
+    return ResponseEntity.ok(members);
+  }
 
+  // [관리자] 단일 회원 삭제
+  @DeleteMapping("/admin/{memId}")
+  public ResponseEntity<Integer> deleteMemberByAdmin(@PathVariable String memId) {
+    int result = memberService.deleteMemberByAdmin(memId);
+    return ResponseEntity.ok(result);
+  }
 }

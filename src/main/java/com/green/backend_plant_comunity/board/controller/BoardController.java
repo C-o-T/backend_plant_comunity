@@ -47,6 +47,19 @@ public class BoardController {
    public List<BoardDTO> getPopularWriting(){
       return boardService.getPopularWriting();
    }
+
+   //전체 게시글 조회api
+   @GetMapping("boardList")
+   public List<BoardDTO> getBoardList(){
+      return boardService.getBoardList();
+   }
+
+   // admin 페이지 단일 게시글 삭제
+   @DeleteMapping("/{boardNum}")
+   public int deleteBoardByAdmin(@PathVariable("boardNum") int boardNum) {
+      return boardService.deleteBoardByAdmin(boardNum);
+   }
+
    //게시글 목록 조회
    @GetMapping("/boardList")
    public Map<String, Object> getBoardList(BoardDTO boardDTO){

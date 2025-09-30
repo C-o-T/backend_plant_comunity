@@ -16,7 +16,6 @@
         <result column="LIKE_CNT"    property="likeCnt"/>
         <result column="DISLIKE_CNT" property="dislikeCnt"/>
         <result column="CREATE_DATE" property="createDate"/>
-        <collection property="imgList" resultMap="boardImg"/>
     </resultMap>
 
     <!--boardImg-->
@@ -83,6 +82,12 @@
         WHERE MEM_ID = #{memId}
     </select>
 
+    <!--전체 게시글 조회-->
+    <select id="getBoardList" resultMap="board">
+        SELECT BOARD_NUM, TITLE, MEM_ID, HERB_NUM, READ_CNT, LIKE_CNT, DISLIKE_CNT, CREATE_DATE
+        FROM BOARD
+    </select>
+
     <!--파일선택시 url 데이터 베이스에 저장-->
     <insert id="insertUrl">
         INSERT INTO BOARD_IMG(
@@ -111,6 +116,13 @@
     <delete id="deleteUnusedImg">
         DELETE FROM BOARD_IMG
         WHERE IMG_NUM = #{imgNum}
+    </delete>
+
+    <!-- admin 단일 게시글 삭제-->
+    <delete id="deleteBoardByAdmin">
+        DELETE
+        FROM BOARD
+        WHERE BOARD_NUM = #{boardNum}
     </delete>
 
     <!--게시글 목록 조회-->
