@@ -158,7 +158,7 @@
             , CATE_NUM
             , READ_CNT
             , LIKE_CNT
-            . DISLIKE_CNT
+            , DISLIKE_CNT
         FROM BOARD
         WHERE BOARD_NUM = #{boardNum}
     </select>
