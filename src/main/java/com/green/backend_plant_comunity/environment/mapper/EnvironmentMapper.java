@@ -20,4 +20,8 @@ public interface EnvironmentMapper {
 
   // 특정 작물 (herbNum)에 대한 센서 데이터 리스트 조회
   public List<EnvironmentDTO> getSensorDataByHerbNum(int herbNum);
+
+  //마지막 센서데이터만 조회
+  public EnvironmentDTO getLastSensorData();
+
 }
