@@ -3,37 +3,17 @@
 
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <!-- namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 적어주세요 -->
-<mapper namespace="mapper">
-	
+<mapper namespace="com.green.backend_plant_comunity.page.mapper.PageMapper">
+    <select id="getTotalBoardCnt" resultMap="com.green.backend_plant_comunity.board.mapper.BoardMapper.board">
+        SELECT
+            COUNT(BOARD_NUM)
+        FROM BOARD
+    </select>
+
+    <select id=""></select>
+
+
+
+
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

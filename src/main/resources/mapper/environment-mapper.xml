@@ -94,6 +94,21 @@
         HERB_NUM = #{herbNum}
         ORDER BY SENSOR_TIME ASC
     </select>
+
+    <!--마지막 센서데이터 조회-->
+    <select id="getLastSensorData" resultMap="environment">
+        SELECT
+            ENV_NUM,
+            SENSOR_TIME,
+            TEMPERATURE,
+            HUMIDITY,
+            ILLUMINANCE,
+            SOIL_MOISTURE
+        FROM SENSOR_DATA
+        ORDER BY SENSOR_TIME DESC
+        LIMIT 1
+    </select>
+
 </mapper>
 
 
