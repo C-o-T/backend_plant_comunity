@@ -2,6 +2,7 @@ package com.green.backend_plant_comunity.board.mapper;
 
 import com.green.backend_plant_comunity.board.dto.BoardDTO;
 import com.green.backend_plant_comunity.board.dto.BoardImgDTO;
+import com.green.backend_plant_comunity.page.dto.PageDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -36,4 +37,10 @@ public interface BoardMapper {
 
    //admin 페이지 게시글 삭제 기능
    public int deleteBoardByAdmin(int boardNum);
+
+   //게시글 목록 조회
+   public List<BoardDTO> getBoardList(BoardDTO boardDTO);
+
+   //글 총개수
+   public int getTotalBoardCnt();
 }
