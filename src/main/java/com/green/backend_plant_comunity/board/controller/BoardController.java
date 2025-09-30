@@ -50,9 +50,9 @@ public class BoardController {
    }
 
    //전체 게시글 조회api
-   @GetMapping("boardList")
-   public List<BoardDTO> getBoardList(){
-      return boardService.getBoardList();
+   @GetMapping("/boardList")
+   public List<BoardDTO> getAllBoardList(){
+      return boardService.getAllBoardList();
    }
 
    // admin 페이지 단일 게시글 삭제
@@ -62,7 +62,7 @@ public class BoardController {
    }
 
    //게시글 목록 조회
-   @GetMapping("/boardList")
+   @GetMapping("/boardList-paging")
    public Map<String, Object> getBoardList(BoardDTO boardDTO){
       int totalCnt = boardService.getTotalBoardCnt();
       boardDTO.setTotalDataCnt(totalCnt);
