@@ -148,5 +148,18 @@
         COUNT(BOARD_NUM)
         FROM BOARD
     </select>
+    <select id="getBoardDetail" resultMap="board">
+        SELECT
+              BOARD_NUM
+            , TITLE
+            , CONTENT
+            , MEM_ID
+            , CATE_NUM
+            , READ_CNT
+            , LIKE_CNT
+            . DISLIKE_CNT
+        FROM BOARD
+        WHERE BOARD_NUM = #{boardNum}
+    </select>
 </mapper>
 
