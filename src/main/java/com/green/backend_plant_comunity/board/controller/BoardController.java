@@ -9,10 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -52,7 +49,13 @@ public class BoardController {
    }
    //게시글 목록 조회
    @GetMapping("/boardList")
-   public List<BoardDTO> getBoardList(){
-      return boardService.getBoardList();
+   public Map<String, Object> getBoardList(BoardDTO boardDTO){
+      int totalCnt = boardService.getTotalBoardCnt();
+      boardDTO.setTotalDataCnt(totalCnt);
+      boardDTO.setPageInfo();
+      Map<String, Object> map = new HashMap<>();
+      map.put("boardList", boardService.getBoardList(boardDTO));
+      map.put("boardDTO", boardDTO);
+      return map;
    }
 }

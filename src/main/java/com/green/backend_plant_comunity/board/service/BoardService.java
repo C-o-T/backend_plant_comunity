@@ -57,7 +57,12 @@ public class BoardService {
    }
 
    //게시글 목록 조회
-   public List<BoardDTO> getBoardList(){
-      return boardMapper.getBoardList();
+   public List<BoardDTO> getBoardList(BoardDTO boardDTO){
+      return boardMapper.getBoardList(boardDTO);
+   }
+
+   //글 총개수
+   public int getTotalBoardCnt(){
+      return boardMapper.getTotalBoardCnt();
    }
 }

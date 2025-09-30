@@ -128,7 +128,13 @@
         FROM BOARD B LEFT JOIN BOARD_IMG I
         ON B.BOARD_NUM = I.BOARD_NUM
         ORDER BY CREATE_DATE DESC
+        LIMIT #{displayCnt} OFFSET #{offsetCnt}
     </select>
-
+    <!--글 총 개수-->
+    <select id="getTotalBoardCnt" resultType="int">
+        SELECT
+        COUNT(BOARD_NUM)
+        FROM BOARD
+    </select>
 </mapper>
 

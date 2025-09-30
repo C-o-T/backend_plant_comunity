@@ -1,10 +1,11 @@
 package com.green.backend_plant_comunity.board.dto;
 
+import com.green.backend_plant_comunity.page.dto.PageDTO;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 @Data
-public class BoardDTO {
+public class BoardDTO extends PageDTO {
    private int boardNum;
    private String title;
    private String content;
@@ -16,4 +17,5 @@ public class BoardDTO {
    private LocalDateTime createDate;
 
    private BoardImgDTO imgList;
+
 }
