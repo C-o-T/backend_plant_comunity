@@ -142,6 +142,7 @@
         ORDER BY CREATE_DATE DESC
         LIMIT #{displayCnt} OFFSET #{offsetCnt}
     </select>
+
     <!--글 총 개수-->
     <select id="getTotalBoardCnt" resultType="int">
         SELECT
