@@ -5,6 +5,7 @@ import com.green.backend_plant_comunity.board.dto.BoardImgDTO;
 import com.green.backend_plant_comunity.board.service.BoardService;
 import com.green.backend_plant_comunity.util.FileUploadUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,5 +58,16 @@ public class BoardController {
       map.put("boardList", boardService.getBoardList(boardDTO));
       map.put("boardDTO", boardDTO);
       return map;
+   }
+
+   //게시글 상세 조회
+   @GetMapping("/boardDetail/{boardNum}")
+   public ResponseEntity<> getBoardDetail(@PathVariable int boardNum){
+      try {
+
+      }catch (Exception e){
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body()
+      }
    }
 }

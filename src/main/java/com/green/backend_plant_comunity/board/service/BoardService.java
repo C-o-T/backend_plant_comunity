@@ -65,4 +65,9 @@ public class BoardService {
    public int getTotalBoardCnt(){
       return boardMapper.getTotalBoardCnt();
    }
+
+   //게시글 상세보기
+   public BoardDTO getBoardDetail(int boardNum){
+      return boardMapper.getBoardDetail(boardNum);
+   }
 }

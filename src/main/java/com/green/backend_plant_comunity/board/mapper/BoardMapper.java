@@ -39,4 +39,7 @@ public interface BoardMapper {
 
    //글 총개수
    public int getTotalBoardCnt();
+
+   //게시글 상세보기
+   public BoardDTO getBoardDetail(int boardNum);
 }
