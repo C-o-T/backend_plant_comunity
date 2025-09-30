@@ -33,4 +33,9 @@ public class EnvironmentService {
     return environmentMapper.getSensorDataByHerbNum(herbNum);
   }
 
+  //마지막 센서데이터만 조회
+  public EnvironmentDTO getLastSensorData(){
+    return environmentMapper.getLastSensorData();
+  }
+
 }
