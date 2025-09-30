@@ -50,9 +50,9 @@ public class BoardController {
    }
 
    //전체 게시글 조회api
-   @GetMapping("boardList")
-   public List<BoardDTO> getBoardList(){
-      return boardService.getBoardList();
+   @GetMapping("allBoardList")
+   public List<BoardDTO> getAllBoardList(){
+      return boardService.getAllBoardList();
    }
 
    // admin 페이지 단일 게시글 삭제
@@ -75,12 +75,13 @@ public class BoardController {
 
    //게시글 상세 조회
    @GetMapping("/boardDetail/{boardNum}")
-   public ResponseEntity<> getBoardDetail(@PathVariable int boardNum){
+   public ResponseEntity<?> getBoardDetail(@PathVariable int boardNum){
       try {
-
+         BoardDTO boardDTO = boardService.getBoardDetail(boardNum);
+         return ResponseEntity.status(HttpStatus.OK).body(boardDTO);
       }catch (Exception e){
          e.printStackTrace();
-         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body()
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회중 오류남");
       }
    }
 }

@@ -52,8 +52,8 @@ public class BoardService {
    }
 
    //전체 게시글 조회
-   public List<BoardDTO> getBoardList(){
-      return boardMapper.getBoardList();
+   public List<BoardDTO> getAllBoardList(){
+      return boardMapper.getAllBoardList();
    }
 
    //url 데이터베이스에 삽입

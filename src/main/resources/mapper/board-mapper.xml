@@ -83,7 +83,7 @@
     </select>
 
     <!--전체 게시글 조회-->
-    <select id="getBoardList" resultMap="board">
+    <select id="getAllBoardList" resultMap="board">
         SELECT BOARD_NUM, TITLE, MEM_ID, HERB_NUM, READ_CNT, LIKE_CNT, DISLIKE_CNT, CREATE_DATE
         FROM BOARD
     </select>
@@ -142,6 +142,7 @@
         ORDER BY CREATE_DATE DESC
         LIMIT #{displayCnt} OFFSET #{offsetCnt}
     </select>
+
     <!--글 총 개수-->
     <select id="getTotalBoardCnt" resultType="int">
         SELECT
