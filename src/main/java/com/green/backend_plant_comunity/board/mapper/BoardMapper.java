@@ -23,7 +23,7 @@ public interface BoardMapper {
    public List<BoardDTO> getPopularWriting();
 
    //전체 게시글 조회
-   public List<BoardDTO> getBoardList();
+   public List<BoardDTO> getAllBoardList();
 
    //url 데이터베이스에 삽입
    public void insertUrl(List<BoardImgDTO> imgList);
