@@ -64,8 +64,8 @@ public class MemberController {
   }
 
   @GetMapping("/admin")
-  public ResponseEntity<List<com.green.backend_plant_comunity.member.model.MemberRes>> getAllMembers() {
-    List<com.green.backend_plant_comunity.member.model.MemberRes> members = memberService.getAllMembers();
+  public ResponseEntity<List<MemberDTO>> getAllMembers() {
+    List<MemberDTO> members = memberService.getAllMembers();
     return ResponseEntity.ok(members);
   }
 

@@ -57,7 +57,7 @@ public class MemberService {
   }
 
   // [관리자] 전체 회원 목록 조회
-  public List<com.green.backend_plant_comunity.member.model.MemberRes> getAllMembers() {
+  public List<MemberDTO> getAllMembers() {
     return memberMapper.selAllMembers();
   }
 
