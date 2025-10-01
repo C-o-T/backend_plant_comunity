@@ -79,4 +79,42 @@ public class BoardService {
    public BoardDTO getBoardDetail(int boardNum){
       return boardMapper.getBoardDetail(boardNum);
    }
+
+   //게시글 삭제
+   @Transactional(rollbackFor = Exception.class)
+   public void deleteBoard(int boardNum){
+      // 1. 해당 게시글의 이미지를 USED = FALSE로 변경
+      boardMapper.markImagesAsUnused(boardNum);
+      
+      // 2. 게시글 삭제
+      boardMapper.deleteBoard(boardNum);
+      
+      // 3. 이미지는 스케줄러가 자동 정리
+   }
+
+   //게시글 수정
+   @Transactional(rollbackFor = Exception.class)
+   public void updateBoard(BoardDTO boardDTO){
+      BoardImgDTO boardImgDTO = new BoardImgDTO();
+      
+      // 1. 게시글 내용 업데이트
+      boardMapper.updateBoard(boardDTO);
+
+      // 2. 기존 이미지를 모두 USED = FALSE로 변경
+      boardMapper.markImagesAsUnused(boardDTO.getBoardNum());
+
+      // 3. 새로운 HTML에서 이미지 추출
+      String contentHtml = boardDTO.getContent();
+      List<String> imgUrls = HtmlImageParser.extractImageUrls(contentHtml);
+
+      // 4. 사용된 이미지만 USED = TRUE로 변경
+      for(String url : imgUrls) {
+         System.out.println("수정 후 사용 이미지: " + url);
+         boardImgDTO.setImgUrl(url);
+         boardImgDTO.setBoardNum(boardDTO.getBoardNum());
+         boardImgDTO.setUsed(true);
+         boardMapper.updateImg(boardImgDTO);
+      }
+      // 5. 미사용 이미지는 스케줄러가 자동 정리
+   }
 }

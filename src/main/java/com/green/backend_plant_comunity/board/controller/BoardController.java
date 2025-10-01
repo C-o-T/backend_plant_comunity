@@ -84,4 +84,29 @@ public class BoardController {
          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회중 오류남");
       }
    }
+
+   //게시글 삭제
+   @DeleteMapping("/boardDetail/{boardNum}")
+   public ResponseEntity<?> deleteBoard(@PathVariable int boardNum){
+      try {
+         boardService.deleteBoard(boardNum);
+         return ResponseEntity.status(HttpStatus.OK).body("게시글이 삭제되었습니다.");
+      }catch (Exception e){
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제중 오류남");
+      }
+   }
+
+   //게시글 수정
+   @PutMapping("/boardDetail/{boardNum}")
+   public ResponseEntity<?> updateBoard(@PathVariable int boardNum, @RequestBody BoardDTO boardDTO){
+      try {
+         boardDTO.setBoardNum(boardNum);
+         boardService.updateBoard(boardDTO);
+         return ResponseEntity.status(HttpStatus.OK).body("게시글이 수정되었습니다.");
+      }catch (Exception e){
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정중 오류남");
+      }
+   }
 }
