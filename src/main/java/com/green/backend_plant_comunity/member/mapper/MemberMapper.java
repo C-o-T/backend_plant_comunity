@@ -33,7 +33,7 @@ public interface MemberMapper {
   public MemberDTO getMemberDetail(String memId);
 
   // [관리자] 전체 회원 목록 조회
-  public List<com.green.backend_plant_comunity.member.model.MemberRes> selAllMembers();
+  public List<MemberDTO> selAllMembers();
 
   // [관리자] 회원 삭제
   public int deleteMemberByAdmin(String memId);
