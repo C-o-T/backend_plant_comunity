@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.green.backend_plant_comunity.message.mapper.MessageMapper">
+
+    <resultMap id="message" type="com.green.backend_plant_comunity.message.dto.MessageDTO">
+        <id     column="MSG_NUM"              property="msgNum" />
+        <result column="SENDER_ID"               property="senderId" />
+        <result column="SENDER_NAME"             property="senderName" />
+        <result column="RECEIVER_ID"             property="receiverId" />
+        <result column="RECEIVER_NAME"           property="receiverName" />
+        <result column="TITLE"                   property="title" />
+        <result column="CONTENT"                 property="content" />
+        <result column="IS_READ"                 property="isRead" />
+        <result column="IS_DELETED_BY_SENDER"    property="isDeletedBySender" />
+        <result column="IS_DELETED_BY_RECEIVER"  property="isDeletedByReceiver" />
+        <result column="CREATED_AT"              property="createdAt" />
+        <result column="READ_AT"                 property="readAt" />
+    </resultMap>
+
+    <!-- 쪽지 보내기 -->
+    <insert id="insertMessage">
+        INSERT INTO MESSAGE (
+            SENDER_ID
+            , RECEIVER_ID
+            , TITLE
+            , CONTENT
+            , IS_READ
+            , IS_DELETED_BY_SENDER
+            , IS_DELETED_BY_RECEIVER
+            , CREATED_AT
+        ) VALUES (
+            #{senderId}
+            , #{receiverId}
+            , #{title}
+            , #{content}
+            , FALSE
+            , FALSE
+            , FALSE
+            , NOW()
+        )
+    </insert>
+
+    <!-- 받은 쪽지함 -->
+    <select id="selectReceivedMessages" resultMap="message">
+        SELECT
+            m.MSG_NUM
+            , m.SENDER_ID
+            , s.MEM_NAME AS SENDER_NAME
+            , m.RECEIVER_ID
+            , r.MEM_NAME AS RECEIVER_NAME
+            , m.TITLE
+            , m.CONTENT
+            , m.IS_READ
+            , m.CREATED_AT
+            , m.READ_AT
+        FROM MESSAGE m
+        INNER JOIN MEMBER s ON m.SENDER_ID = s.MEM_ID
+        INNER JOIN MEMBER r ON m.RECEIVER_ID = r.MEM_ID
+        WHERE m.RECEIVER_ID = #{receiverId}
+          AND m.IS_DELETED_BY_RECEIVER = FALSE
+        ORDER BY m.CREATED_AT DESC
+    </select>
+
+    <!-- 보낸 쪽지함 -->
+    <select id="selectSentMessages" resultMap="message">
+        SELECT
+            m.MSG_NUM
+            , m.SENDER_ID
+            , s.MEM_NAME AS SENDER_NAME
+            , m.RECEIVER_ID
+            , r.MEM_NAME AS RECEIVER_NAME
+            , m.TITLE
+            , m.CONTENT
+            , m.IS_READ
+            , m.CREATED_AT
+            , m.READ_AT
+        FROM MESSAGE m
+        INNER JOIN MEMBER s ON m.SENDER_ID = s.MEM_ID
+        INNER JOIN MEMBER r ON m.RECEIVER_ID = r.MEM_ID
+        WHERE m.SENDER_ID = #{senderId}
+          AND m.IS_DELETED_BY_SENDER = FALSE
+        ORDER BY m.CREATED_AT DESC
+    </select>
+
+    <!-- 쪽지 상세 조회 -->
+    <select id="selectMessageById" resultMap="message">
+        SELECT
+            m.MSG_NUM
+            , m.SENDER_ID
+            , s.MEM_NAME AS SENDER_NAME
+            , m.RECEIVER_ID
+            , r.MEM_NAME AS RECEIVER_NAME
+            , m.TITLE
+            , m.CONTENT
+            , m.IS_READ
+            , m.IS_DELETED_BY_SENDER
+            , m.IS_DELETED_BY_RECEIVER
+            , m.CREATED_AT
+            , m.READ_AT
+        FROM MESSAGE m
+        INNER JOIN MEMBER s ON m.SENDER_ID = s.MEM_ID
+        INNER JOIN MEMBER r ON m.RECEIVER_ID = r.MEM_ID
+        WHERE m.MESSAGE_ID = #{messageId}
+    </select>
+
+    <!-- 쪽지 읽음 처리 -->
+    <update id="updateMessageAsRead">
+        UPDATE MESSAGE
+        SET IS_READ = TRUE
+            , READ_AT = NOW()
+        WHERE MSG_NUM = #{msgNum}
+    </update>
+
+    <!-- 안 읽은 쪽지 개수 -->
+    <select id="countUnreadMessages" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM MESSAGE
+        WHERE RECEIVER_ID = #{receiverId}
+          AND IS_READ = FALSE
+          AND IS_DELETED_BY_RECEIVER = FALSE
+    </select>
+
+    <!-- 받은 사람이 삭제 -->
+    <update id="updateDeletedByReceiver">
+        UPDATE MESSAGE
+        SET IS_DELETED_BY_RECEIVER = TRUE
+        WHERE MSG_NUM = #{msgNum}
+    </update>
+
+    <!-- 보낸 사람이 삭제 -->
+    <update id="updateDeletedBySender">
+        UPDATE MESSAGE
+        SET IS_DELETED_BY_SENDER = TRUE
+        WHERE MSG_NUM = #{msgNum}
+    </update>
+
+    <!-- 양쪽 삭제 확인 -->
+    <select id="checkBothDeleted" resultMap="message">
+        SELECT
+            MSG_NUM
+            , IS_DELETED_BY_SENDER
+            , IS_DELETED_BY_RECEIVER
+        FROM MESSAGE
+        WHERE MSG_NUM = #{msgNum}
+    </select>
+
+    <!-- 실제 삭제 -->
+    <delete id="deleteMessage">
+        DELETE FROM MESSAGE
+        WHERE MSG_NUM = #{msgNum}
+    </delete>
+
+</mapper>
