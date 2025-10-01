@@ -22,7 +22,7 @@ public class PageDTO {
    // 생성자
    public PageDTO() {
       nowPage = 1;
-      displayCnt = 5;
+      displayCnt = 10;
       displayPageCnt = 5;
    }
 

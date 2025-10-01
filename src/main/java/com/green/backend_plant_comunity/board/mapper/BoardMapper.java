@@ -46,4 +46,13 @@ public interface BoardMapper {
 
    //게시글 상세보기
    public BoardDTO getBoardDetail(int boardNum);
+
+   //게시글 삭제
+   public void deleteBoard(int boardNum);
+
+   //게시글 수정
+   public void updateBoard(BoardDTO boardDTO);
+
+   //게시글의 모든 이미지를 USED=FALSE로 변경
+   public void markImagesAsUnused(int boardNum);
 }

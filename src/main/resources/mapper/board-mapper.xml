@@ -16,6 +16,8 @@
         <result column="LIKE_CNT"    property="likeCnt"/>
         <result column="DISLIKE_CNT" property="dislikeCnt"/>
         <result column="CREATE_DATE" property="createDate"/>
+        <collection property="imgList" resultMap="boardImg"/>
+        <association property="category" resultMap="category"/>
     </resultMap>
 
     <!--boardImg-->
@@ -26,6 +28,10 @@
         <result column="BOARD_NUM"          property="boardNum"/>
         <result column="IMG_URL" property="imgUrl"/>
         <result column="USED" property="used"/>
+    </resultMap>
+
+    <resultMap id="category" type="">
+
     </resultMap>
 
     <!--글쓸때 이미지 글번호와 일치 시키고 이미지 사용 확인-->
@@ -142,12 +148,15 @@
         ORDER BY CREATE_DATE DESC
         LIMIT #{displayCnt} OFFSET #{offsetCnt}
     </select>
+
     <!--글 총 개수-->
     <select id="getTotalBoardCnt" resultType="int">
         SELECT
         COUNT(BOARD_NUM)
         FROM BOARD
     </select>
+
+    <!--게시글 상세조회-->
     <select id="getBoardDetail" resultMap="board">
         SELECT
               BOARD_NUM
@@ -161,5 +170,25 @@
         FROM BOARD
         WHERE BOARD_NUM = #{boardNum}
     </select>
-</mapper>
 
+    <!--게시글 삭제-->
+    <delete id="deleteBoard">
+        DELETE FROM BOARD
+        WHERE BOARD_NUM = #{boardNum}
+    </delete>
+
+    <!--게시글 수정-->
+    <update id="updateBoard">
+        UPDATE BOARD
+        SET TITLE = #{title},
+            CONTENT = #{content}
+        WHERE BOARD_NUM = #{boardNum}
+    </update>
+
+    <!--게시글의 모든 이미지를 USED=FALSE로 변경-->
+    <update id="markImagesAsUnused">
+        UPDATE BOARD_IMG
+        SET USED = FALSE
+        WHERE BOARD_NUM = #{boardNum}
+    </update>
+</mapper>
