@@ -17,7 +17,6 @@
         <result column="DISLIKE_CNT" property="dislikeCnt"/>
         <result column="CREATE_DATE" property="createDate"/>
         <collection property="imgList" resultMap="boardImg"/>
-        <association property="category" resultMap="category"/>
     </resultMap>
 
     <!--boardImg-->
@@ -28,10 +27,6 @@
         <result column="BOARD_NUM"          property="boardNum"/>
         <result column="IMG_URL" property="imgUrl"/>
         <result column="USED" property="used"/>
-    </resultMap>
-
-    <resultMap id="category" type="">
-
     </resultMap>
 
     <!--글쓸때 이미지 글번호와 일치 시키고 이미지 사용 확인-->
