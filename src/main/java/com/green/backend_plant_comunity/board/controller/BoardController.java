@@ -63,14 +63,20 @@ public class BoardController {
 
    //게시글 목록 조회
    @GetMapping("/boardList-paging")
-   public Map<String, Object> getBoardList(BoardDTO boardDTO){
-      int totalCnt = boardService.getTotalBoardCnt();
-      boardDTO.setTotalDataCnt(totalCnt);
-      boardDTO.setPageInfo();
-      Map<String, Object> map = new HashMap<>();
-      map.put("boardList", boardService.getBoardList(boardDTO));
-      map.put("boardDTO", boardDTO);
-      return map;
+   public ResponseEntity<?> getBoardList(BoardDTO boardDTO){
+      try {
+         System.out.println(boardDTO);
+         int totalCnt = boardService.getTotalBoardCnt(boardDTO);
+         boardDTO.setTotalDataCnt(totalCnt);
+         boardDTO.setPageInfo();
+         Map<String, Object> map = new HashMap<>();
+         map.put("boardList", boardService.getBoardList(boardDTO));
+         map.put("boardDTO", boardDTO);
+         return ResponseEntity.status(HttpStatus.OK).body(map);
+      }catch (Exception e){
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+      }
    }
 
    //게시글 상세 조회

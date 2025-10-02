@@ -1,4 +1,4 @@
-package com.green.backend_plant_comunity.board.dto;
+package com.green.backend_plant_comunity.category.dto;
 
 import lombok.Data;
 

@@ -67,12 +67,28 @@ public class BoardService {
    }
    //게시글 목록 조회
    public List<BoardDTO> getBoardList(BoardDTO boardDTO){
-      return boardMapper.getBoardList(boardDTO);
+      List<BoardDTO> list = boardMapper.getBoardList(boardDTO);
+      
+      // 검색 조건이 있는데 결과가 없으면 예외 발생
+      if(boardDTO.getSearchType() != null && boardDTO.getSearchKeyword() != null 
+         && !boardDTO.getSearchKeyword().isEmpty() && list.isEmpty()) {
+         throw new RuntimeException("검색 결과가 없습니다.");
+      }
+      
+      return list;
    }
 
    //글 총개수
-   public int getTotalBoardCnt(){
-      return boardMapper.getTotalBoardCnt();
+   public int getTotalBoardCnt(BoardDTO boardDTO){
+      int totalCnt = boardMapper.getTotalBoardCnt(boardDTO);
+      
+      // 검색 조건이 있는데 결과가 0이면 예외 발생
+      if(boardDTO.getSearchType() != null && boardDTO.getSearchKeyword() != null 
+         && !boardDTO.getSearchKeyword().isEmpty() && totalCnt == 0) {
+         throw new RuntimeException("검색 결과가 없습니다.");
+      }
+      
+      return totalCnt;
    }
 
    //게시글 상세보기
