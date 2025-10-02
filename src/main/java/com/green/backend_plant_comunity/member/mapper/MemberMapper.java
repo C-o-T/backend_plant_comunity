@@ -37,4 +37,7 @@ public interface MemberMapper {
 
   // [관리자] 회원 삭제
   public int deleteMemberByAdmin(String memId);
+
+  // 회원 검색 (쪽지 보낼 때)
+  public List<MemberDTO> searchMembers(String keyword);
 }

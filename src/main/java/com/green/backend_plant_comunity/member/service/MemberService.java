@@ -65,4 +65,9 @@ public class MemberService {
   public int deleteMemberByAdmin(String memberId) {
     return memberMapper.deleteMemberByAdmin(memberId);
   }
+
+  // 회원 검색 (쪽지 보낼 때)
+  public List<MemberDTO> searchMembers(String keyword) {
+    return memberMapper.searchMembers(keyword);
+  }
 }

@@ -168,4 +168,17 @@
         DELETE FROM member
         WHERE mem_id = #{memId}
     </delete>
+
+    <!-- 회원 검색 (쪽지 보낼 때) -->
+    <select id="searchMembers" resultMap="member">
+        SELECT
+            MEM_ID
+            , MEM_NAME
+            , MEM_EMAIL
+        FROM MEMBER
+        WHERE (MEM_ID LIKE CONCAT('%', #{keyword}, '%')
+           OR MEM_NAME LIKE CONCAT('%', #{keyword}, '%'))
+        ORDER BY MEM_NAME
+        LIMIT 10
+    </select>
 </mapper>
