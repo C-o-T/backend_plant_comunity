@@ -1,6 +1,7 @@
 package com.green.backend_plant_comunity.board.service;
 
 import com.green.backend_plant_comunity.board.dto.QnaBoardDTO;
+import com.green.backend_plant_comunity.board.dto.QnaCategoryDTO;
 import com.green.backend_plant_comunity.board.mapper.QnaBoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,11 @@ public class QnaBoardService {
     public void insertAnswer(QnaBoardDTO qnaBoardDTO) {
         qnaBoardMapper.insertAnswer(qnaBoardDTO);
     }
+
+
+    // 활성화된 카테고리 목록 조회
+    public List<QnaCategoryDTO> getQnaCategories() {
+        return qnaBoardMapper.selectQnaCategories();
 
     // 관리자용 문의사항 전체 조회 (필터링 포함)
     public List<QnaBoardDTO> getAdminQnaList(Integer cateNum, String memId, String qnaStatus) {
@@ -124,5 +130,6 @@ public class QnaBoardService {
                 (status.equals("답변대기") ||
                         status.equals("답변중") ||
                         status.equals("답변완료"));
+
     }
 }

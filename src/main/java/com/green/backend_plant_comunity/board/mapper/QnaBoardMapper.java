@@ -1,6 +1,7 @@
 package com.green.backend_plant_comunity.board.mapper;
 
 import com.green.backend_plant_comunity.board.dto.QnaBoardDTO;
+import com.green.backend_plant_comunity.board.dto.QnaCategoryDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,6 +31,10 @@ public interface QnaBoardMapper {
     //관리자 답변 등록
     void insertAnswer(QnaBoardDTO qnaBoardDTO);
 
+
+    // 활성화된 카테고리 목록 조회
+    List<QnaCategoryDTO> selectQnaCategories();
+
     // 관리자용 문의사항 전체 조회 (필터링 포함)
     List<QnaBoardDTO> getAdminQnaList(Integer cateNum, String memId, String qnaStatus);
 
@@ -47,4 +52,5 @@ public interface QnaBoardMapper {
 
     // 전체 문의사항 수 조회 (필터링 포함)
     int getQnaCount(Integer cateNum, String memId, String qnaStatus);
+
 }
