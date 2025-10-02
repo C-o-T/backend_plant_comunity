@@ -17,6 +17,12 @@
         <result column="ANSWER_DATE" property="answerDate" />
         <result column="ADMIN_ID" property="adminId" />
         <result column="CREATE_DATE" property="createDate" />
+        <association property="qnaCategory" javaType="com.green.backend_plant_comunity.board.dto.QnaCategoryDTO">
+            <id column="CATE_NUM" property="cateNum" />
+            <result column="CATE_NAME" property="cateName" />
+            <result column="CATE_ORDER" property="cateOrder" />
+            <result column="IS_ACTIVE" property="isActive" />
+        </association>
     </resultMap>
 
     <!-- 
@@ -26,18 +32,22 @@
     -->
     <select id="getMyQnaList" resultMap="qnaBoard">
         SELECT 
-            QNA_NUM
-            , CATE_NUM
-            , TITLE
-            , MEM_ID
-            , QNA_STATUS
-            , CREATE_DATE
+            Q.QNA_NUM
+            , Q.CATE_NUM
+            , C.CATE_NAME
+            , C.CATE_ORDER
+            , C.IS_ACTIVE
+            , Q.TITLE
+            , Q.MEM_ID
+            , Q.QNA_STATUS
+            , Q.CREATE_DATE
         FROM
-            QNA
+            QNA Q
+        LEFT JOIN QNA_CATEGORY C ON Q.CATE_NUM = C.CATE_NUM
         WHERE
-            MEM_ID = #{memId}
+            Q.MEM_ID = #{memId}
         ORDER BY
-            CREATE_DATE DESC
+            Q.CREATE_DATE DESC
     </select>
 
     <!-- 
@@ -47,20 +57,24 @@
     -->
     <select id="getQnaDetail" resultMap="qnaBoard">
         SELECT
-            QNA_NUM
-            , CATE_NUM
-            , TITLE
-            , CONTENT
-            , MEM_ID
-            , QNA_STATUS
-            , ANSWER_CONTENT
-            , ANSWER_DATE
-            , ADMIN_ID
-            , CREATE_DATE
+            Q.QNA_NUM
+            , Q.CATE_NUM
+            , C.CATE_NAME
+            , C.CATE_ORDER
+            , C.IS_ACTIVE
+            , Q.TITLE
+            , Q.CONTENT
+            , Q.MEM_ID
+            , Q.QNA_STATUS
+            , Q.ANSWER_CONTENT
+            , Q.ANSWER_DATE
+            , Q.ADMIN_ID
+            , Q.CREATE_DATE
         FROM
-            QNA
+            QNA Q
+        LEFT JOIN QNA_CATEGORY C ON Q.CATE_NUM = C.CATE_NUM
         WHERE
-            QNA_NUM = #{qnaNum}
+            Q.QNA_NUM = #{qnaNum}
     </select>
 
     <!-- 
@@ -133,5 +147,17 @@
         , QNA_STATUS = '답변완료'
         WHERE QNA_NUM = #{qnaNum}
     </update>
+
+    <!--    카테고리 num 가지고 오는 쿼리-->
+    <select id="selectQnaCategories" resultType="com.green.backend_plant_comunity.board.dto.QnaCategoryDTO">
+        SELECT
+        CATE_NUM as cateNum,
+        CATE_NAME as cateName,
+        CATE_ORDER as cateOrder,
+        IS_ACTIVE as isActive
+        FROM QNA_CATEGORY
+        WHERE IS_ACTIVE = TRUE
+        ORDER BY CATE_ORDER ASC, CATE_NUM ASC
+    </select>
 
 </mapper>

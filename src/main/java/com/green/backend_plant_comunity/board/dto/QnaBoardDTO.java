@@ -16,4 +16,6 @@ public class QnaBoardDTO {
     private LocalDateTime answerDate;    // 답변 날짜
     private String adminId;              // 답변한 관리자 ID
     private LocalDateTime createDate;    // 문의 등록일
+
+    private QnaCategoryDTO qnaCategory;  // 카테고리 정보
 }

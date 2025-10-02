@@ -1,6 +1,7 @@
 package com.green.backend_plant_comunity.board.controller;
 
 import com.green.backend_plant_comunity.board.dto.QnaBoardDTO;
+import com.green.backend_plant_comunity.board.dto.QnaCategoryDTO;
 import com.green.backend_plant_comunity.board.service.QnaBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -143,5 +144,11 @@ public class QnaBoardController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("답변 등록 중 오류가 발생했습니다.");
         }
+    }
+
+    // 활성화된 카테고리 목록 조회
+    @GetMapping("/categories")
+    public List<QnaCategoryDTO> getCategories() {
+        return qnaBoardService.getQnaCategories();
     }
 }
