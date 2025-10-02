@@ -20,7 +20,6 @@ public class MessageService {
         messageDTO.setReceiverId(request.getReceiverId());
         messageDTO.setTitle(request.getTitle());
         messageDTO.setContent(request.getContent());
-        
         messageMapper.insertMessage(messageDTO);
     }
     
@@ -35,22 +34,9 @@ public class MessageService {
     }
     
     // 쪽지 읽기
-    public MessageDTO readMessage(int messageId, String memberId) {
-        MessageDTO message = messageMapper.selectMessageById(messageId);
-        
-        if (message == null) {
-            throw new RuntimeException("쪽지를 찾을 수 없습니다.");
-        }
-        
-        if (!message.getReceiverId().equals(memberId)) {
-            throw new RuntimeException("권한이 없습니다.");
-        }
-        
-        if (!message.isRead()) {
-            messageMapper.updateMessageAsRead(messageId);
-        }
-        
-        return message;
+    public MessageDTO readMessage(int messageId) {
+        messageMapper.updateMessageAsRead(messageId);
+        return messageMapper.selectMessageById(messageId);
     }
     
     // 안 읽은 쪽지 개수
@@ -62,16 +48,10 @@ public class MessageService {
     public void deleteMessage(int messageId, String memberId) {
         MessageDTO message = messageMapper.selectMessageById(messageId);
         
-        if (message == null) {
-            throw new RuntimeException("쪽지를 찾을 수 없습니다.");
-        }
-        
         if (message.getSenderId().equals(memberId)) {
             messageMapper.updateDeletedBySender(messageId);
-        } else if (message.getReceiverId().equals(memberId)) {
-            messageMapper.updateDeletedByReceiver(messageId);
         } else {
-            throw new RuntimeException("권한이 없습니다.");
+            messageMapper.updateDeletedByReceiver(messageId);
         }
         
         MessageDTO updated = messageMapper.checkBothDeleted(messageId);

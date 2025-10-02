@@ -17,4 +17,5 @@ public class MemberDTO {
   private LocalDateTime joinDate;
   private String memBusinessNum;
   private String memBusinessName;
+  private String memStatus;  // 추가: 회원 상태 (ACTIVE, DELETED, SUSPENDED 등)
 }
