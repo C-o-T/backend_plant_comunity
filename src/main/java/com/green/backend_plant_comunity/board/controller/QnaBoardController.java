@@ -144,7 +144,7 @@ public class QnaBoardController {
     public List<QnaCategoryDTO> getCategories() {
         return qnaBoardService.getQnaCategories();
     }
-}
+
 
     // 관리자용 문의사항 전체 조회 (필터링 포함)
     @GetMapping("/admin/list")

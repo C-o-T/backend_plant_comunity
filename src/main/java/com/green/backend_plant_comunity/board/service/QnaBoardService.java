@@ -49,6 +49,7 @@ public class QnaBoardService {
     // 활성화된 카테고리 목록 조회
     public List<QnaCategoryDTO> getQnaCategories() {
         return qnaBoardMapper.selectQnaCategories();
+    }
 
     // 관리자용 문의사항 전체 조회 (필터링 포함)
     public List<QnaBoardDTO> getAdminQnaList(Integer cateNum, String memId, String qnaStatus) {
