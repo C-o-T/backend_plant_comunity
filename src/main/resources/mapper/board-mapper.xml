@@ -137,9 +137,29 @@
             , READ_CNT
             , LIKE_CNT
             , DISLIKE_CNT
+            , CREATE_DATE
             , (SELECT IMG_URL FROM BOARD_IMG WHERE BOARD_NUM = B.BOARD_NUM ORDER BY IMG_NUM LIMIT 1) AS IMG_URL
         FROM BOARD B LEFT JOIN BOARD_IMG I
         ON B.BOARD_NUM = I.BOARD_NUM
+        <where>
+            <if test="cateNum != null and cateNum != 0">
+                AND B.CATE_NUM = #{cateNum}
+            </if>
+            <if test="searchType != null and searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchType == 'memId'">
+                        AND B.MEM_ID = #{searchKeyword}
+                    </when>
+                    <when test="searchType == 'title'">
+                        AND B.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'titleAndContent'">
+                        AND (B.TITLE LIKE CONCAT('%', #{searchKeyword}, '%') 
+                             OR B.CONTENT LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                </choose>
+            </if>
+        </where>
         ORDER BY CREATE_DATE DESC
         LIMIT #{displayCnt} OFFSET #{offsetCnt}
     </select>
@@ -149,6 +169,25 @@
         SELECT
         COUNT(BOARD_NUM)
         FROM BOARD
+        <where>
+            <if test="cateNum != null and cateNum != 0">
+                AND CATE_NUM = #{cateNum}
+            </if>
+            <if test="searchType != null and searchKeyword != null and searchKeyword != ''">
+                <choose>
+                    <when test="searchType == 'memId'">
+                        AND MEM_ID = #{searchKeyword}
+                    </when>
+                    <when test="searchType == 'title'">
+                        AND TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
+                    </when>
+                    <when test="searchType == 'titleAndContent'">
+                        AND (TITLE LIKE CONCAT('%', #{searchKeyword}, '%') 
+                             OR CONTENT LIKE CONCAT('%', #{searchKeyword}, '%'))
+                    </when>
+                </choose>
+            </if>
+        </where>
     </select>
 
     <!--게시글 상세조회-->
@@ -162,6 +201,7 @@
             , READ_CNT
             , LIKE_CNT
             , DISLIKE_CNT
+            , CREATE_DATE
         FROM BOARD
         WHERE BOARD_NUM = #{boardNum}
     </select>

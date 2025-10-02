@@ -42,7 +42,7 @@ public interface BoardMapper {
    public List<BoardDTO> getBoardList(BoardDTO boardDTO);
 
    //글 총개수
-   public int getTotalBoardCnt();
+   public int getTotalBoardCnt(BoardDTO boardDTO);
 
    //게시글 상세보기
    public BoardDTO getBoardDetail(int boardNum);

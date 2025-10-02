@@ -15,6 +15,8 @@ public class BoardDTO extends PageDTO {
    private int likeCnt;
    private int dislikeCnt;
    private LocalDateTime createDate;
+   private String searchType;
+   private String searchKeyword;
 
    private BoardImgDTO imgList;
 
