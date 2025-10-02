@@ -16,6 +16,7 @@
         <result column="JOIN_DATE"          property="joinDate" />
         <result column="MEM_BUSINESS_NUM"   property="memBusinessNum" />
         <result column="MEM_BUSINESS_NAME"  property="memBusinessName" />
+        <result column="MEM_STATUS"         property="memStatus" />
     </resultMap>
 
     <!--회원가입 버튼 누르면 실행할 쿼리-->
@@ -41,6 +42,7 @@
         <if test='memBusinessName != ""'>
             , MEM_BUSINESS_NAME
         </if>
+            , MEM_STATUS
         ) VALUES (
             #{memId}
             , #{memPw}
@@ -62,10 +64,11 @@
         <if test='memBusinessName != ""'>
             , #{memBusinessName}
         </if>
+            , COALESCE(#{memStatus}, 'ACTIVE')
         );
     </insert>
 
-    <!--회원아이디 중복검사-->
+    <!--회원아이디 중복검사 (활성 회원만)-->
     <select id="checkId" resultType="int">
         SELECT
             COUNT(*)
@@ -73,9 +76,11 @@
             member
         WHERE
             MEM_ID = #{memId}
+        AND 
+            MEM_STATUS = 'ACTIVE'
     </select>
 
-    <!--회원연락처 중복검사-->
+    <!--회원연락처 중복검사 (활성 회원만)-->
     <select id="checkTell" resultType="int">
         SELECT
             COUNT(*)
@@ -83,8 +88,11 @@
             member
         WHERE
             MEM_TELL = #{memTell}
+        AND 
+            MEM_STATUS = 'ACTIVE'
     </select>
-    <!--사업자번호 중복검사-->
+    
+    <!--사업자번호 중복검사 (활성 회원만)-->
     <select id="checkBusinessNum" resultType="int">
         SELECT
             COUNT(*)
@@ -92,22 +100,28 @@
             member
         WHERE
             MEM_BUSINESS_NUM = #{memBusinessNum}
+        AND 
+            MEM_STATUS = 'ACTIVE'
     </select>
-    <!--로그인시 아이디, 비밀번호 일치 조회-->
+    
+    <!--로그인시 아이디, 비밀번호 일치 조회 (활성 회원만)-->
     <select id="login" resultMap="member">
         SELECT
             MEM_ID
             , MEM_NAME
             , MEM_GRADE
+            , MEM_STATUS
         FROM
             MEMBER
         WHERE
             MEM_ID = #{memId}
         AND
             MEM_PW = #{memPw}
+        AND
+            MEM_STATUS = 'ACTIVE'
     </select>
 
-    <!--아이디 찾기-->
+    <!--아이디 찾기 (활성 회원만)-->
     <select id="findId" resultMap="member">
         SELECT
             MEM_ID
@@ -117,8 +131,11 @@
             MEM_NAME = #{memName}
         AND
             MEM_TELL = #{memTell}
+        AND
+            MEM_STATUS = 'ACTIVE'
     </select>
-    <!--비밀번호 찾기-->
+    
+    <!--비밀번호 찾기 (활성 회원만)-->
     <select id="findPw" resultMap="member">
         SELECT
             MEM_ID
@@ -130,6 +147,8 @@
             MEM_TELL = #{memTell}
         AND
             MEM_ID = #{memId}
+        AND
+            MEM_STATUS = 'ACTIVE'
     </select>
 
     <!--my page 화면 에서 회원정보 조회-->
@@ -145,12 +164,13 @@
             , MEM_GRADE
             , MEM_BUSINESS_NUM
             , MEM_BUSINESS_NAME
+            , MEM_STATUS
         FROM MEMBER
         WHERE MEM_ID = #{memId}
+        AND MEM_STATUS = 'ACTIVE'
     </select>
 
-
-    <!-- [관리자] 전체 회원 목록 조회 -->
+    <!-- [관리자] 전체 회원 목록 조회 (활성 회원만) -->
     <select id="selAllMembers" resultMap="member">
         SELECT
             MEM_ID,
@@ -158,10 +178,13 @@
             MEM_TELL,
             MEM_ADDR,
             MEM_BUSINESS_NUM,
-            JOIN_DATE
+            JOIN_DATE,
+            MEM_STATUS
         FROM MEMBER
+        WHERE MEM_STATUS = 'ACTIVE'
         ORDER BY JOIN_DATE DESC
     </select>
+
 
     <!-- [관리자] 회원 삭제 -->
     <delete id="deleteMemberByAdmin">
@@ -181,4 +204,42 @@
         ORDER BY MEM_NAME
         LIMIT 10
     </select>
+
+    <!-- [관리자] 삭제된 회원 목록 조회 -->
+    <select id="selDeletedMembers" resultMap="member">
+        SELECT
+            MEM_ID,
+            MEM_NAME,
+            MEM_TELL,
+            MEM_ADDR,
+            MEM_BUSINESS_NUM,
+            JOIN_DATE,
+            MEM_STATUS
+        FROM MEMBER
+        WHERE MEM_STATUS = 'DELETED'
+        ORDER BY JOIN_DATE DESC
+    </select>
+
+    <!-- 회원 상태 확인 -->
+    <select id="getMemberStatus" resultType="String">
+        SELECT MEM_STATUS
+        FROM MEMBER
+        WHERE MEM_ID = #{memId}
+    </select>
+
+    <!-- [관리자] 회원 상태 변경 (논리적 삭제) -->
+    <update id="updateMemberStatus">
+        UPDATE MEMBER 
+        SET MEM_STATUS = #{status}
+        WHERE MEM_ID = #{memId}
+    </update>
+
+    <!-- [관리자] 회원 복구 -->
+    <update id="restoreMember">
+        UPDATE MEMBER 
+        SET MEM_STATUS = 'ACTIVE'
+        WHERE MEM_ID = #{memId}
+        AND MEM_STATUS = 'DELETED'
+    </update>
+
 </mapper>

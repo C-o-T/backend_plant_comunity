@@ -2,8 +2,10 @@ package com.green.backend_plant_comunity.board.mapper;
 
 import com.green.backend_plant_comunity.board.dto.QnaBoardDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface QnaBoardMapper {
@@ -27,4 +29,22 @@ public interface QnaBoardMapper {
 
     //관리자 답변 등록
     void insertAnswer(QnaBoardDTO qnaBoardDTO);
+
+    // 관리자용 문의사항 전체 조회 (필터링 포함)
+    List<QnaBoardDTO> getAdminQnaList(Integer cateNum, String memId, String qnaStatus);
+
+    // 관리자 답변 등록 및 상태 변경
+    int insertAdminAnswer(int qnaNum, String answerContent, String adminId);
+
+    // 문의사항 답변 상태 변경
+    int updateQnaStatus(int qnaNum, String qnaStatus);
+
+    // 카테고리별 문의사항 통계 조회
+    List<Map<String, Object>> getQnaStatsByCategory();
+
+    // 상태별 문의사항 통계 조회
+    List<Map<String, Object>> getQnaStatsByStatus();
+
+    // 전체 문의사항 수 조회 (필터링 포함)
+    int getQnaCount(Integer cateNum, String memId, String qnaStatus);
 }
