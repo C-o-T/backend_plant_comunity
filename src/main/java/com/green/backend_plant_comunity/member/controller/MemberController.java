@@ -167,4 +167,15 @@ public class MemberController {
     
     return ResponseEntity.ok(response);
   }
+
+  // 회원 검색 (쪽지 보낼 때)
+  @GetMapping("/search")
+  public ResponseEntity<List<MemberDTO>> searchMembers(@RequestParam String keyword) {
+    try {
+      List<MemberDTO> members = memberService.searchMembers(keyword);
+      return ResponseEntity.ok(members);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
 }

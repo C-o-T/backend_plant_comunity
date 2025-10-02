@@ -98,4 +98,9 @@ public class MemberService {
     String status = getMemberStatus(memId);
     return "ACTIVE".equals(status);
   }
+
+  // 회원 검색 (쪽지 보낼 때)
+  public List<MemberDTO> searchMembers(String keyword) {
+    return memberMapper.searchMembers(keyword);
+  }
 }

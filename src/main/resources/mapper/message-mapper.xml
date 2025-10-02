@@ -101,7 +101,7 @@
         FROM MESSAGE m
         INNER JOIN MEMBER s ON m.SENDER_ID = s.MEM_ID
         INNER JOIN MEMBER r ON m.RECEIVER_ID = r.MEM_ID
-        WHERE m.MESSAGE_ID = #{messageId}
+        WHERE m.MSG_NUM = #{msgNum}
     </select>
 
     <!-- 쪽지 읽음 처리 -->

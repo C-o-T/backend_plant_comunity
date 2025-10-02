@@ -35,6 +35,13 @@ public interface MemberMapper {
   // [관리자] 전체 회원 목록 조회 (활성 회원만)
   public List<MemberDTO> selAllMembers();
 
+
+  // [관리자] 회원 삭제
+  public int deleteMemberByAdmin(String memId);
+
+  // 회원 검색 (쪽지 보낼 때)
+  public List<MemberDTO> searchMembers(String keyword);
+
   // [관리자] 회원 논리적 삭제 (상태 변경)
   public int updateMemberStatus(String memId, String status);
 
@@ -46,4 +53,5 @@ public interface MemberMapper {
 
   // 회원 상태 확인
   public String getMemberStatus(String memId);
+
 }
