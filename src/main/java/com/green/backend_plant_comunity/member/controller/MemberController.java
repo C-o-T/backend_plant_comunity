@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("members")
@@ -63,16 +65,106 @@ public class MemberController {
     return memberService.getMemberDetail(memId);
   }
 
+  // [관리자] 활성 회원 목록 조회
   @GetMapping("/admin")
   public ResponseEntity<List<MemberDTO>> getAllMembers() {
     List<MemberDTO> members = memberService.getAllMembers();
     return ResponseEntity.ok(members);
   }
 
-  // [관리자] 단일 회원 삭제
-  @DeleteMapping("/admin/{memId}")
-  public ResponseEntity<Integer> deleteMemberByAdmin(@PathVariable String memId) {
-    int result = memberService.deleteMemberByAdmin(memId);
-    return ResponseEntity.ok(result);
+  // [관리자] 삭제된 회원 목록 조회
+  @GetMapping("/admin/deleted")
+  public ResponseEntity<List<MemberDTO>> getDeletedMembers() {
+    List<MemberDTO> deletedMembers = memberService.getDeletedMembers();
+    return ResponseEntity.ok(deletedMembers);
+  }
+
+  // [관리자] 회원 논리적 삭제 (상태 변경)
+  @PutMapping("/admin/{memId}/delete")
+  public ResponseEntity<Map<String, Object>> deleteMemberByAdmin(@PathVariable String memId) {
+    Map<String, Object> response = new HashMap<>();
+    
+    try {
+      int result = memberService.deleteMemberByAdmin(memId);
+      
+      if (result > 0) {
+        response.put("success", true);
+        response.put("message", "회원이 성공적으로 삭제 처리되었습니다.");
+      } else {
+        response.put("success", false);
+        response.put("message", "회원 삭제 처리에 실패했습니다.");
+      }
+    } catch (Exception e) {
+      response.put("success", false);
+      response.put("message", "오류가 발생했습니다: " + e.getMessage());
+    }
+    
+    return ResponseEntity.ok(response);
+  }
+
+  // [관리자] 회원 복구
+  @PutMapping("/admin/{memId}/restore")
+  public ResponseEntity<Map<String, Object>> restoreMemberByAdmin(@PathVariable String memId) {
+    Map<String, Object> response = new HashMap<>();
+    
+    try {
+      int result = memberService.restoreMemberByAdmin(memId);
+      
+      if (result > 0) {
+        response.put("success", true);
+        response.put("message", "회원이 성공적으로 복구되었습니다.");
+      } else {
+        response.put("success", false);
+        response.put("message", "회원 복구에 실패했습니다.");
+      }
+    } catch (Exception e) {
+      response.put("success", false);
+      response.put("message", "오류가 발생했습니다: " + e.getMessage());
+    }
+    
+    return ResponseEntity.ok(response);
+  }
+
+  // [관리자] 회원 정지
+  @PutMapping("/admin/{memId}/suspend")
+  public ResponseEntity<Map<String, Object>> suspendMemberByAdmin(@PathVariable String memId) {
+    Map<String, Object> response = new HashMap<>();
+    
+    try {
+      int result = memberService.suspendMemberByAdmin(memId);
+      
+      if (result > 0) {
+        response.put("success", true);
+        response.put("message", "회원이 성공적으로 정지 처리되었습니다.");
+      } else {
+        response.put("success", false);
+        response.put("message", "회원 정지 처리에 실패했습니다.");
+      }
+    } catch (Exception e) {
+      response.put("success", false);
+      response.put("message", "오류가 발생했습니다: " + e.getMessage());
+    }
+    
+    return ResponseEntity.ok(response);
+  }
+
+  // 회원 상태 확인
+  @GetMapping("/status/{memId}")
+  public ResponseEntity<Map<String, Object>> getMemberStatus(@PathVariable String memId) {
+    Map<String, Object> response = new HashMap<>();
+    
+    try {
+      String status = memberService.getMemberStatus(memId);
+      boolean isActive = "ACTIVE".equals(status);
+      
+      response.put("success", true);
+      response.put("status", status);
+      response.put("isActive", isActive);
+    } catch (Exception e) {
+      response.put("success", false);
+      response.put("message", "오류가 발생했습니다: " + e.getMessage());
+    }
+    
+    return ResponseEntity.ok(response);
   }
 }
