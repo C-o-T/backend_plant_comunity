@@ -55,4 +55,10 @@ public interface BoardMapper {
 
    //게시글의 모든 이미지를 USED=FALSE로 변경
    public void markImagesAsUnused(int boardNum);
+
+   //좋아요 개수 증가
+   public void increaseLikeCnt(int boardNum);
+
+   //좋아요 개수 감소
+   public void decreaseLikeCnt(int boardNum);
 }

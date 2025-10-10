@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.green.backend_plant_comunity.like.mapper.LikeMapper">
+
+    <!--좋아요 존재 확인-->
+    <select id="existsLike" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1 FROM BOARD_LIKE
+            WHERE BOARD_NUM = #{boardNum}
+              AND MEM_ID = #{memId}
+        )
+    </select>
+
+    <!--좋아요 추가-->
+    <insert id="insertLike">
+        INSERT INTO BOARD_LIKE(BOARD_NUM, MEM_ID)
+        VALUES(#{boardNum}, #{memId})
+    </insert>
+
+    <!--좋아요 삭제-->
+    <delete id="deleteLike">
+        DELETE FROM BOARD_LIKE
+        WHERE BOARD_NUM = #{boardNum}
+          AND MEM_ID = #{memId}
+    </delete>
+</mapper>

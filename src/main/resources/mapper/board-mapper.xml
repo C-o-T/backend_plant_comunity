@@ -226,4 +226,18 @@
         SET USED = FALSE
         WHERE BOARD_NUM = #{boardNum}
     </update>
+
+    <!--좋아요 개수 증가-->
+    <update id="increaseLikeCnt">
+        UPDATE BOARD
+        SET LIKE_CNT = LIKE_CNT + 1
+        WHERE BOARD_NUM = #{boardNum}
+    </update>
+
+    <!--좋아요 개수 감소-->
+    <update id="decreaseLikeCnt">
+        UPDATE BOARD
+        SET LIKE_CNT = LIKE_CNT - 1
+        WHERE BOARD_NUM = #{boardNum}
+    </update>
 </mapper>

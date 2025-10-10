@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/boards")
 public class BoardController {
    private final BoardService boardService;
+   
    //게시글 등록할때 url 미리등록
    @PostMapping("/upload/img")
    public ResponseEntity<?> uploadImg(@RequestParam("img") List<MultipartFile> imgs){
@@ -35,7 +36,6 @@ public class BoardController {
    public void writeBoard(@RequestBody BoardDTO boardDTO) {
       boardService.writeBoard(boardDTO);
    }
-
 
    @GetMapping("/{memId}")
    //마이팜 게시글 조회 api

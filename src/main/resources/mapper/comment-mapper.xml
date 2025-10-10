@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="com.green.backend_plant_comunity.comment.mapper.CommentMapper">
+    
+    <!--comment-->
+    <resultMap id="comment" type="com.green.backend_plant_comunity.comment.dto.CommentDTO">
+        <id     column="COMMENT_NUM"         property="commentNum"/>
+        <result column="BOARD_NUM"           property="boardNum"/>
+        <result column="MEM_ID"              property="memId"/>
+        <result column="CONTENT"             property="content"/>
+        <result column="PARENT_COMMENT_NUM"  property="parentCommentNum"/>
+        <result column="CREATE_DATE"         property="createDate"/>
+    </resultMap>
+
+    <!--댓글 등록-->
+    <insert id="insertComment">
+        INSERT INTO COMMENT(
+              BOARD_NUM
+            , MEM_ID
+            , CONTENT
+            , PARENT_COMMENT_NUM
+        )VALUES(
+              #{boardNum}
+            , #{memId}
+            , #{content}
+            , #{parentCommentNum}
+        )
+    </insert>
+
+    <!--게시글의 댓글 조회 (일반 댓글만)-->
+    <select id="getCommentsByBoardNum" resultMap="comment">
+        SELECT
+              COMMENT_NUM
+            , BOARD_NUM
+            , MEM_ID
+            , CONTENT
+            , PARENT_COMMENT_NUM
+            , CREATE_DATE
+        FROM COMMENT
+        WHERE BOARD_NUM = #{boardNum}
+          AND PARENT_COMMENT_NUM IS NULL
+        ORDER BY CREATE_DATE ASC
+    </select>
+
+    <!--특정 댓글의 대댓글 조회-->
+    <select id="getRepliesByParentNum" resultMap="comment">
+        SELECT
+              COMMENT_NUM
+            , BOARD_NUM
+            , MEM_ID
+            , CONTENT
+            , PARENT_COMMENT_NUM
+            , CREATE_DATE
+        FROM COMMENT
+        WHERE PARENT_COMMENT_NUM = #{parentCommentNum}
+        ORDER BY CREATE_DATE ASC
+    </select>
+</mapper>
