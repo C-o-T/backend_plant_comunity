@@ -65,6 +65,18 @@ public class MemberController {
     return memberService.getMemberDetail(memId);
   }
 
+  //회원정보 수정
+  @PutMapping("/{memId}")
+  public ResponseEntity<?> updateMember(@PathVariable("memId") String memId, @RequestBody MemberDTO memberDTO){
+    try {
+      memberDTO.setMemId(memId); // URL의 memId 설정
+      int result = memberService.updateMember(memberDTO);
+      return ResponseEntity.ok(result);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().build();
+    }
+  }
+
   // [관리자] 활성 회원 목록 조회
   @GetMapping("/admin")
   public ResponseEntity<List<MemberDTO>> getAllMembers() {
