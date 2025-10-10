@@ -41,6 +41,13 @@
         )
     </insert>
 
+    <!--모든사람 쪽지보내기-->
+    <select id="selectAllActiveMemberIds" resultType="String">
+        SELECT MEM_ID
+        FROM MEMBER
+        WHERE MEM_STATUS = 'Y'
+    </select>
+
     <!-- 받은 쪽지함 -->
     <select id="selectReceivedMessages" resultMap="message">
         SELECT

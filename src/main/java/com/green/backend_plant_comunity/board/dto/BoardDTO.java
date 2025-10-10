@@ -1,5 +1,6 @@
 package com.green.backend_plant_comunity.board.dto;
 
+import com.green.backend_plant_comunity.category.dto.CategoryDTO;
 import com.green.backend_plant_comunity.page.dto.PageDTO;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ public class BoardDTO extends PageDTO {
    private LocalDateTime createDate;
    private String searchType;
    private String searchKeyword;
+   private CategoryDTO categoryDTO;
 
    private BoardImgDTO imgList;
 
