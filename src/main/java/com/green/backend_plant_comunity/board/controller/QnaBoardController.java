@@ -138,13 +138,11 @@ public class QnaBoardController {
         }
     }
 
-
     // 활성화된 카테고리 목록 조회
     @GetMapping("/categories")
     public List<QnaCategoryDTO> getCategories() {
         return qnaBoardService.getQnaCategories();
     }
-}
 
     // 관리자용 문의사항 전체 조회 (필터링 포함)
     @GetMapping("/admin/list")
@@ -302,4 +300,3 @@ public class QnaBoardController {
         }
     }
 }
-
