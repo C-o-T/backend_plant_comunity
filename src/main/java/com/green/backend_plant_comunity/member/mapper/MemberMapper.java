@@ -32,6 +32,9 @@ public interface MemberMapper {
   //my page 화면 에서 회원정보 조회
   public MemberDTO getMemberDetail(String memId);
 
+  //회원정보 수정
+  public int updateMember(MemberDTO memberDTO);
+
   // [관리자] 전체 회원 목록 조회 (활성 회원만)
   public List<MemberDTO> selAllMembers();
 

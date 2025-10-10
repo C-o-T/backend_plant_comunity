@@ -63,6 +63,11 @@ public class MemberService {
     return memberMapper.getMemberDetail(memId);
   }
 
+  //회원정보 수정
+  public int updateMember(MemberDTO memberDTO){
+    return memberMapper.updateMember(memberDTO);
+  }
+
   // [관리자] 활성 회원 목록 조회
   public List<MemberDTO> getAllMembers() {
     return memberMapper.selAllMembers();

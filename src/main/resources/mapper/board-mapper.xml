@@ -148,7 +148,7 @@
             <if test="searchType != null and searchKeyword != null and searchKeyword != ''">
                 <choose>
                     <when test="searchType == 'memId'">
-                        AND B.MEM_ID = #{searchKeyword}
+                        AND B.MEM_ID LIKE CONCAT('%', #{searchKeyword}, '%')
                     </when>
                     <when test="searchType == 'title'">
                         AND B.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
@@ -176,7 +176,7 @@
             <if test="searchType != null and searchKeyword != null and searchKeyword != ''">
                 <choose>
                     <when test="searchType == 'memId'">
-                        AND MEM_ID = #{searchKeyword}
+                        AND MEM_ID LIKE CONCAT('%', #{searchKeyword}, '%')
                     </when>
                     <when test="searchType == 'title'">
                         AND TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
