@@ -48,13 +48,13 @@ public class MemberController {
 
 
   //아이디찾기
-  @GetMapping("findId")
+  @GetMapping("/findId")
   public MemberDTO findId (MemberDTO memberDTO) {
     return memberService.findId(memberDTO);
   }
 
   //비밀번호찾기
-  @GetMapping("findPw")
+  @GetMapping("/findPw")
   public MemberDTO findPw (MemberDTO memberDTO) {
     return memberService.findPw(memberDTO);
   }

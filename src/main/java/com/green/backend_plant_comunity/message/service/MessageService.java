@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageService {
     private final MessageMapper messageMapper;
-    
+
     // 쪽지 보내기
     public void sendMessage(String senderId, MessageSendRequestDTO request) {
         MessageDTO messageDTO = new MessageDTO();
@@ -22,6 +22,7 @@ public class MessageService {
         messageDTO.setContent(request.getContent());
         messageMapper.insertMessage(messageDTO);
     }
+
     
     // 받은 쪽지함
     public List<MessageDTO> getReceivedMessages(String memberId) {

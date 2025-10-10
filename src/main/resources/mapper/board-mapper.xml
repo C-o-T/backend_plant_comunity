@@ -17,6 +17,7 @@
         <result column="DISLIKE_CNT" property="dislikeCnt"/>
         <result column="CREATE_DATE" property="createDate"/>
         <collection property="imgList" resultMap="boardImg"/>
+        <collection property="categoryDTO" resultMap="com.green.backend_plant_comunity.category.mapper.CategoryMapper.category"/>
     </resultMap>
 
     <!--boardImg-->
@@ -64,15 +65,19 @@
     <!--홈 화면 인기글 조회-->
     <select id="getPopularWriting" resultMap="board">
         SELECT
-            BOARD_NUM,
-            TITLE, MEM_ID,
-            CATE_NUM,
-            READ_CNT,
-            LIKE_CNT,
-            DISLIKE_CNT,
-            CREATE_DATE
-        FROM BOARD
-        ORDER BY (LIKE_CNT + READ_CNT) DESC, CREATE_DATE DESC
+            B.BOARD_NUM
+            , B.TITLE
+            , B.MEM_ID
+            , B.CATE_NUM
+            , B.READ_CNT
+            , B.LIKE_CNT
+            , B.DISLIKE_CNT
+            , B.CREATE_DATE
+            , C.CATE_NAME
+            , C.CATE_NUM AS CATEGORY_CATE_NUM
+        FROM BOARD B
+        INNER JOIN CATEGORY C ON B.CATE_NUM = C.CATE_NUM
+        ORDER BY (B.LIKE_CNT + B.READ_CNT) DESC, B.CREATE_DATE DESC
         LIMIT 10
     </select>
 
