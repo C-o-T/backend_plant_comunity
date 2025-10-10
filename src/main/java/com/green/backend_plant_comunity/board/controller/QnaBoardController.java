@@ -138,6 +138,7 @@ public class QnaBoardController {
         }
     }
 
+
     // 활성화된 카테고리 목록 조회
     @GetMapping("/categories")
     public List<QnaCategoryDTO> getCategories() {
@@ -300,3 +301,4 @@ public class QnaBoardController {
         }
     }
 }
+

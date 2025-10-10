@@ -1,122 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+  QNA(1:1 문의) SQL Mapper XML 파일
+  namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 작성
+-->
 <mapper namespace="com.green.backend_plant_comunity.board.mapper.QnaBoardMapper">
-
-    <!-- QNA 게시판 ResultMap -->
-    <resultMap id="qnaBoardResultMap" type="com.green.backend_plant_comunity.board.dto.QnaBoardDTO">
-        <id column="QNA_NUM" property="qnaNum"/>
-        <result column="MEM_ID" property="memId"/>
-        <result column="CATE_NUM" property="cateNum"/>
-        <result column="TITLE" property="title"/>
-        <result column="CONTENT" property="content"/>
-        <result column="CREATE_DATE" property="createDate"/>
-        <result column="UPDATE_DATE" property="updateDate"/>
-        <result column="QNA_STATUS" property="qnaStatus"/>
-        <result column="ANSWER_CONTENT" property="answerContent"/>
-        <result column="ANSWER_DATE" property="answerDate"/>
-        <result column="ADMIN_ID" property="adminId"/>
-        <result column="VIEW_COUNT" property="viewCount"/>
-        <result column="CATE_NAME" property="cateName"/>
-        <result column="MEM_NAME" property="memName"/>
+    <resultMap id="qnaBoard" type="com.green.backend_plant_comunity.board.dto.QnaBoardDTO">
+        <id column="QNA_NUM" property="qnaNum" />
+        <result column="CATE_NUM" property="cateNum" />
+        <result column="TITLE" property="title" />
+        <result column="CONTENT" property="content" />
+        <result column="MEM_ID" property="memId" />
+        <result column="QNA_STATUS" property="qnaStatus" />
+        <result column="ANSWER_CONTENT" property="answerContent" />
+        <result column="ANSWER_DATE" property="answerDate" />
+        <result column="ADMIN_ID" property="adminId" />
+        <result column="CREATE_DATE" property="createDate" />
+        <association property="qnaCategory" javaType="com.green.backend_plant_comunity.board.dto.QnaCategoryDTO">
+            <id column="CATE_NUM" property="cateNum" />
+            <result column="CATE_NAME" property="cateName" />
+            <result column="CATE_ORDER" property="cateOrder" />
+            <result column="IS_ACTIVE" property="isActive" />
+        </association>
     </resultMap>
 
-    <!-- QNA 카테고리 ResultMap -->
-    <resultMap id="qnaCategoryResultMap" type="com.green.backend_plant_comunity.board.dto.QnaCategoryDTO">
-        <id column="CATE_NUM" property="cateNum"/>
-        <result column="CATE_NAME" property="cateName"/>
-        <result column="CATE_DESC" property="cateDesc"/>
-        <result column="IS_ACTIVE" property="isActive"/>
-        <result column="CREATE_DATE" property="createDate"/>
-    </resultMap>
-
-    <!-- 특정 회원의 문의 목록 조회 -->
-    <select id="getMyQnaList" parameterType="String" resultMap="qnaBoardResultMap">
-        SELECT
-        q.QNA_NUM,
-        q.MEM_ID,
-        q.CATE_NUM,
-        q.TITLE,
-        q.CONTENT,
-        q.CREATE_DATE,
-        q.UPDATE_DATE,
-        q.QNA_STATUS,
-        q.ANSWER_CONTENT,
-        q.ANSWER_DATE,
-        q.ADMIN_ID,
-        q.VIEW_COUNT,
-        c.CATE_NAME
-        FROM qna q
-        LEFT JOIN qna_category c ON q.CATE_NUM = c.CATE_NUM
-        WHERE q.MEM_ID = #{memId}
-        ORDER BY q.CREATE_DATE DESC
+    <!--
+      문의 목록 조회 (특정 회원의 문의 내역)
+      마이페이지에서 본인의 문의 내역을 확인할 때 사용
+      #{memId}: 로그인한 회원의 ID
+    -->
+    <select id="getMyQnaList" resultMap="qnaBoard">
+        SELECT 
+            Q.QNA_NUM
+            , Q.CATE_NUM
+            , C.CATE_NAME
+            , C.CATE_ORDER
+            , C.IS_ACTIVE
+            , Q.TITLE
+            , Q.MEM_ID
+            , Q.QNA_STATUS
+            , Q.CREATE_DATE
+        FROM
+            QNA Q
+        LEFT JOIN QNA_CATEGORY C ON Q.CATE_NUM = C.CATE_NUM
+        WHERE
+            Q.MEM_ID = #{memId}
+        ORDER BY
+            Q.CREATE_DATE DESC
     </select>
 
-    <!-- 문의 상세 조회 -->
-    <select id="getQnaDetail" parameterType="int" resultMap="qnaBoardResultMap">
+    <!--
+      문의 상세 조회
+      특정 문의글의 모든 정보를 조회 (답변 포함)
+      #{qnaNum}: 조회할 문의 번호
+    -->
+    <select id="getQnaDetail" resultMap="qnaBoard">
         SELECT
-        q.QNA_NUM,
-        q.MEM_ID,
-        q.CATE_NUM,
-        q.TITLE,
-        q.CONTENT,
-        q.CREATE_DATE,
-        q.UPDATE_DATE,
-        q.QNA_STATUS,
-        q.ANSWER_CONTENT,
-        q.ANSWER_DATE,
-        q.ADMIN_ID,
-        q.VIEW_COUNT,
-        c.CATE_NAME,
-        m.MEM_NAME
-        FROM qna q
-        LEFT JOIN qna_category c ON q.CATE_NUM = c.CATE_NUM
-        LEFT JOIN member m ON q.MEM_ID = m.MEM_ID
-        WHERE q.QNA_NUM = #{qnaNum}
+            Q.QNA_NUM
+            , Q.CATE_NUM
+            , C.CATE_NAME
+            , C.CATE_ORDER
+            , C.IS_ACTIVE
+            , Q.TITLE
+            , Q.CONTENT
+            , Q.MEM_ID
+            , Q.QNA_STATUS
+            , Q.ANSWER_CONTENT
+            , Q.ANSWER_DATE
+            , Q.ADMIN_ID
+            , Q.CREATE_DATE
+        FROM
+            QNA Q
+        LEFT JOIN QNA_CATEGORY C ON Q.CATE_NUM = C.CATE_NUM
+        WHERE
+            Q.QNA_NUM = #{qnaNum}
     </select>
 
-    <!-- 문의 등록 -->
-    <insert id="insertQna" parameterType="com.green.backend_plant_comunity.board.dto.QnaBoardDTO">
-        INSERT INTO qna (
-        MEM_ID,
-        CATE_NUM,
-        TITLE,
-        CONTENT,
-        QNA_STATUS,
-        CREATE_DATE
+    <!--
+      문의 등록
+      회원이 새로운 1:1 문의를 작성할 때 사용
+      QNA_NUM은 AUTO_INCREMENT이므로 INSERT 시 제외
+      QNA_STATUS와 CREATE_DATE는 DEFAULT 값 자동 설정
+    -->
+    <insert id="insertQna">
+        INSERT INTO QNA (
+            CATE_NUM
+            , TITLE
+            , CONTENT
+            , MEM_ID
         ) VALUES (
-        #{memId},
-        #{cateNum},
-        #{title},
-        #{content},
-        '답변대기',
-        NOW()
+              #{cateNum}
+            , #{title}
+            , #{content}
+            , #{memId}
         )
     </insert>
 
-    <!-- 문의 수정 -->
-    <update id="updateQna" parameterType="com.green.backend_plant_comunity.board.dto.QnaBoardDTO">
-        UPDATE qna
+    <!--
+      문의 글 수정
+      작성자 본인만 수정 가능
+      답변 전(QNA_STATUS = '답변대기')일 때만 수정 가능
+      #{qnaNum}: 수정할 문의 번호
+      #{cateNum}: 변경할 카테고리 번호
+      #{title}: 변경할 제목
+      #{content}: 변경할 내용
+      #{memId}: 작성자 ID (본인 확인용)
+    -->
+    <update id="updateQna">
+        UPDATE QNA
         SET
-        CATE_NUM = #{cateNum},
-        TITLE = #{title},
-        CONTENT = #{content},
-        UPDATE_DATE = NOW()
+              CATE_NUM = #{cateNum}
+            , TITLE = #{title}
+            , CONTENT = #{content}
         WHERE QNA_NUM = #{qnaNum}
-        AND MEM_ID = #{memId}
-        AND QNA_STATUS = '답변대기'
+          AND MEM_ID = #{memId}
+          AND QNA_STATUS = '답변대기'
     </update>
 
-    <!-- 문의 삭제 -->
+    <!--
+      문의 글 삭제
+      작성자 본인만 삭제 가능
+      #{qnaNum}: 삭제할 문의 번호
+      #{memId}: 작성자 ID (본인 확인용)
+    -->
     <delete id="deleteQna">
-        DELETE FROM qna
+        DELETE FROM QNA
         WHERE QNA_NUM = #{qnaNum}
-        AND MEM_ID = #{memId}
+          AND MEM_ID = #{memId}
     </delete>
 
-    <!-- 관리자 답변 등록 -->
-    <update id="insertAnswer" parameterType="com.green.backend_plant_comunity.board.dto.QnaBoardDTO">
-        UPDATE qna
+    <!-- 관리자 답변 등록 (기존) -->
+    <update id="insertAnswer">
+        UPDATE QNA
         SET
         ANSWER_CONTENT = #{answerContent},
         ANSWER_DATE = NOW(),
@@ -125,56 +141,54 @@
         WHERE QNA_NUM = #{qnaNum}
     </update>
 
-    <!-- 활성화된 카테고리 목록 조회 -->
-    <select id="selectQnaCategories" resultMap="qnaCategoryResultMap">
+
+    <!--    카테고리 num 가지고 오는 쿼리-->
+    <select id="selectQnaCategories" resultType="com.green.backend_plant_comunity.board.dto.QnaCategoryDTO">
         SELECT
-        CATE_NUM,
-        CATE_NAME,
-        CATE_DESC,
-        IS_ACTIVE,
-        CREATE_DATE
-        FROM qna_category
-        WHERE IS_ACTIVE = 1
-        ORDER BY CATE_NUM ASC
-    </select>
+        CATE_NUM as cateNum,
+        CATE_NAME as cateName,
+        CATE_ORDER as cateOrder,
+        IS_ACTIVE as isActive
+        FROM QNA_CATEGORY
+        WHERE IS_ACTIVE = TRUE
+        ORDER BY CATE_ORDER ASC, CATE_NUM ASC
 
     <!-- 관리자용 문의사항 전체 조회 (필터링 포함) -->
-    <select id="getAdminQnaList" resultMap="qnaBoardResultMap">
+    <select id="getAdminQnaList" resultMap="qnaBoard">
         SELECT
-        q.QNA_NUM,
-        q.MEM_ID,
-        q.CATE_NUM,
-        q.TITLE,
-        q.CONTENT,
-        q.CREATE_DATE,
-        q.UPDATE_DATE,
-        q.QNA_STATUS,
-        q.ANSWER_CONTENT,
-        q.ANSWER_DATE,
-        q.ADMIN_ID,
-        q.VIEW_COUNT,
-        c.CATE_NAME,
-        m.MEM_NAME
-        FROM qna q
-        LEFT JOIN qna_category c ON q.CATE_NUM = c.CATE_NUM
-        LEFT JOIN member m ON q.MEM_ID = m.MEM_ID
+        QNA_NUM,
+        CATE_NUM,
+        TITLE,
+        CONTENT,
+        MEM_ID,
+        QNA_STATUS,
+        ANSWER_CONTENT,
+        ANSWER_DATE,
+        ADMIN_ID,
+        CREATE_DATE
+        FROM QNA
         <where>
             <if test="cateNum != null">
-                AND q.CATE_NUM = #{cateNum}
+                AND CATE_NUM = #{cateNum}
             </if>
             <if test="memId != null and memId != ''">
-                AND q.MEM_ID LIKE CONCAT('%', #{memId}, '%')
+                AND MEM_ID LIKE CONCAT('%', #{memId}, '%')
             </if>
             <if test="qnaStatus != null and qnaStatus != ''">
-                AND q.QNA_STATUS = #{qnaStatus}
+                AND QNA_STATUS = #{qnaStatus}
             </if>
         </where>
-        ORDER BY q.CREATE_DATE DESC
+        ORDER BY
+        CASE WHEN QNA_STATUS = '답변대기' THEN 1
+        WHEN QNA_STATUS = '답변중' THEN 2
+        WHEN QNA_STATUS = '답변완료' THEN 3
+        ELSE 4 END,
+        CREATE_DATE DESC
     </select>
 
-    <!-- 관리자 답변 등록 (새로운 방식) -->
+    <!-- 관리자 답변 등록 및 상태 변경 -->
     <update id="insertAdminAnswer">
-        UPDATE qna
+        UPDATE QNA
         SET
         ANSWER_CONTENT = #{answerContent},
         ANSWER_DATE = NOW(),
@@ -185,26 +199,19 @@
 
     <!-- 문의사항 답변 상태 변경 -->
     <update id="updateQnaStatus">
-        UPDATE qna
-        SET
-        QNA_STATUS = #{qnaStatus},
-        UPDATE_DATE = NOW()
+        UPDATE QNA
+        SET QNA_STATUS = #{qnaStatus}
         WHERE QNA_NUM = #{qnaNum}
     </update>
 
     <!-- 카테고리별 문의사항 통계 조회 -->
     <select id="getQnaStatsByCategory" resultType="map">
         SELECT
-        c.CATE_NAME as categoryName,
-        COUNT(q.QNA_NUM) as totalCount,
-        SUM(CASE WHEN q.QNA_STATUS = '답변대기' THEN 1 ELSE 0 END) as waitingCount,
-        SUM(CASE WHEN q.QNA_STATUS = '답변중' THEN 1 ELSE 0 END) as processingCount,
-        SUM(CASE WHEN q.QNA_STATUS = '답변완료' THEN 1 ELSE 0 END) as completedCount
-        FROM qna_category c
-        LEFT JOIN qna q ON c.CATE_NUM = q.CATE_NUM
-        WHERE c.IS_ACTIVE = 1
-        GROUP BY c.CATE_NUM, c.CATE_NAME
-        ORDER BY c.CATE_NUM ASC
+        CATE_NUM as categoryNum,
+        COUNT(*) as count
+        FROM QNA
+        GROUP BY CATE_NUM
+        ORDER BY CATE_NUM
     </select>
 
     <!-- 상태별 문의사항 통계 조회 -->
@@ -212,32 +219,31 @@
         SELECT
         QNA_STATUS as status,
         COUNT(*) as count
-        FROM qna
+        FROM QNA
         GROUP BY QNA_STATUS
         ORDER BY
-        CASE QNA_STATUS
-        WHEN '답변대기' THEN 1
-        WHEN '답변중' THEN 2
-        WHEN '답변완료' THEN 3
-        ELSE 4
-        END
+        CASE WHEN QNA_STATUS = '답변대기' THEN 1
+        WHEN QNA_STATUS = '답변중' THEN 2
+        WHEN QNA_STATUS = '답변완료' THEN 3
+        ELSE 4 END
     </select>
 
     <!-- 전체 문의사항 수 조회 (필터링 포함) -->
     <select id="getQnaCount" resultType="int">
         SELECT COUNT(*)
-        FROM qna q
+        FROM QNA
         <where>
             <if test="cateNum != null">
-                AND q.CATE_NUM = #{cateNum}
+                AND CATE_NUM = #{cateNum}
             </if>
             <if test="memId != null and memId != ''">
-                AND q.MEM_ID LIKE CONCAT('%', #{memId}, '%')
+                AND MEM_ID LIKE CONCAT('%', #{memId}, '%')
             </if>
             <if test="qnaStatus != null and qnaStatus != ''">
-                AND q.QNA_STATUS = #{qnaStatus}
+                AND QNA_STATUS = #{qnaStatus}
             </if>
         </where>
+
     </select>
 
 </mapper>
