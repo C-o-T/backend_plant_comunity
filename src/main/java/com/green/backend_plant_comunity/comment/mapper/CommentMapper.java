@@ -16,4 +16,7 @@ public interface CommentMapper {
 
    //특정 댓글의 대댓글 조회
    List<CommentDTO> getRepliesByParentNum(int parentCommentNum);
+
+   //게시글의 댓글 총 개수 (댓글 + 대댓글)
+   int getCommentCount(int boardNum);
 }

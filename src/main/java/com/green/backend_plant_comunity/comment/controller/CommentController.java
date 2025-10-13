@@ -38,4 +38,16 @@ public class CommentController {
          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회중 오류남");
       }
    }
+
+   //댓글 개수 조회
+   @GetMapping("/{boardNum}/count")
+   public ResponseEntity<?> getCommentCount(@PathVariable int boardNum){
+      try {
+         int count = commentService.getCommentCount(boardNum);
+         return ResponseEntity.status(HttpStatus.OK).body(count);
+      }catch (Exception e){
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회중 오류남");
+      }
+   }
 }

@@ -71,7 +71,14 @@ public class MemberController {
     try {
       memberDTO.setMemId(memId); // URL의 memId 설정
       int result = memberService.updateMember(memberDTO);
-      return ResponseEntity.ok(result);
+      
+      if (result > 0) {
+        // 수정 성공 시 업데이트된 회원정보 반환
+        MemberDTO updatedMember = memberService.getMemberDetail(memId);
+        return ResponseEntity.ok(updatedMember);
+      } else {
+        return ResponseEntity.badRequest().body("수정 실패");
+      }
     } catch (Exception e) {
       return ResponseEntity.badRequest().build();
     }

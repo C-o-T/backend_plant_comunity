@@ -133,4 +133,12 @@ public class BoardService {
       }
       // 5. 미사용 이미지는 스케줄러가 자동 정리
    }
+
+   //조회수 증가
+   @Transactional(rollbackFor = Exception.class)
+   public void updateCnt(int boardNum){
+      System.out.println("조회수 증가 요청: boardNum=" + boardNum);
+      boardMapper.updateCnt(boardNum);
+      System.out.println("조회수 증가 완료");
+   }
 }
