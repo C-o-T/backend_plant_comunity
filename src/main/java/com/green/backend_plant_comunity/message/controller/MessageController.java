@@ -52,16 +52,9 @@ public class MessageController {
     @GetMapping("/{messageId}")
     public ResponseEntity<MessageDTO> readMessage(@PathVariable int messageId) {
         try {
-            System.out.println("=== 쪽지 조회 시작 ===");
-            System.out.println("messageId: " + messageId);
-
             MessageDTO message = messageService.readMessage(messageId);
-
-            System.out.println("조회 성공: " + message);
             return ResponseEntity.ok(message);
         } catch (Exception e) {
-            System.err.println("=== 쪽지 조회 에러 ===");
-            e.printStackTrace(); // 전체 에러 스택 출력
             return ResponseEntity.badRequest().build();
         }
     }
@@ -79,9 +72,12 @@ public class MessageController {
     
     // 쪽지 삭제
     @DeleteMapping("/{messageId}/{memberId}")
-    public ResponseEntity<String> deleteMessage(@PathVariable int messageId, @PathVariable String memberId) {
+    public ResponseEntity<String> deleteMessage(
+            @PathVariable int messageId,
+            @PathVariable String memberId,
+            @RequestParam(required = false) String deleteType) {
         try {
-            messageService.deleteMessage(messageId, memberId);
+            messageService.deleteMessage(messageId, memberId, deleteType);
             return ResponseEntity.ok("쪽지 삭제 성공");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("쪽지 삭제 실패");
