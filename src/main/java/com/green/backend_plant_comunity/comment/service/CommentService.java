@@ -32,4 +32,9 @@ public class CommentService {
       
       return comments;
    }
+
+   //게시글의 댓글 총 개수
+   public int getCommentCount(int boardNum){
+      return commentMapper.getCommentCount(boardNum);
+   }
 }

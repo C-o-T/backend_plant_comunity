@@ -111,6 +111,7 @@
             , MEM_NAME
             , MEM_GRADE
             , MEM_STATUS
+            , MEM_ADDR
         FROM
             MEMBER
         WHERE

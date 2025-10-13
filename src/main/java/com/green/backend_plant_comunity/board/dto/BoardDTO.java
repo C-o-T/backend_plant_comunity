@@ -15,11 +15,12 @@ public class BoardDTO extends PageDTO {
    private int readCnt;
    private int likeCnt;
    private int dislikeCnt;
+   private int commentCnt;  // ← 추가!
    private LocalDateTime createDate;
    private String searchType;
    private String searchKeyword;
-   private CategoryDTO categoryDTO;
 
+   private CategoryDTO categoryDTO;
    private BoardImgDTO imgList;
 
 }

@@ -15,6 +15,7 @@
         <result column="READ_CNT"    property="readCnt"/>
         <result column="LIKE_CNT"    property="likeCnt"/>
         <result column="DISLIKE_CNT" property="dislikeCnt"/>
+        <result column="COMMENT_CNT" property="commentCnt"/>
         <result column="CREATE_DATE" property="createDate"/>
         <collection property="imgList" resultMap="boardImg"/>
         <collection property="categoryDTO" resultMap="com.green.backend_plant_comunity.category.mapper.CategoryMapper.category"/>
@@ -135,15 +136,16 @@
     <select id="getBoardList" resultMap="board">
         SELECT
               B.BOARD_NUM
-            , MEM_ID
-            , CONTENT
-            , CATE_NUM
-            , TITLE
-            , READ_CNT
-            , LIKE_CNT
-            , DISLIKE_CNT
-            , CREATE_DATE
+            , B.MEM_ID
+            , B.CONTENT
+            , B.CATE_NUM
+            , B.TITLE
+            , B.READ_CNT
+            , B.LIKE_CNT
+            , B.DISLIKE_CNT
+            , B.CREATE_DATE
             , (SELECT IMG_URL FROM BOARD_IMG WHERE BOARD_NUM = B.BOARD_NUM ORDER BY IMG_NUM LIMIT 1) AS IMG_URL
+            , (SELECT COUNT(*) FROM COMMENT WHERE BOARD_NUM = B.BOARD_NUM) AS COMMENT_CNT
         FROM BOARD B LEFT JOIN BOARD_IMG I
         ON B.BOARD_NUM = I.BOARD_NUM
         <where>
@@ -243,6 +245,14 @@
     <update id="decreaseLikeCnt">
         UPDATE BOARD
         SET LIKE_CNT = LIKE_CNT - 1
+        WHERE BOARD_NUM = #{boardNum}
+    </update>
+
+    <!--조회수 증가-->
+    <update id="updateCnt">
+        UPDATE BOARD
+        SET
+            READ_CNT = READ_CNT + 1
         WHERE BOARD_NUM = #{boardNum}
     </update>
 </mapper>

@@ -40,6 +40,16 @@ public class MemberService {
   public MemberDTO login (MemberDTO memberDTO) {
     MemberDTO loginMember = memberMapper.login(memberDTO);
     
+    // 디버깅용 로그 추가
+    System.out.println("=== 로그인 Service 디버깅 ===");
+    System.out.println("조회된 회원: " + loginMember);
+    if (loginMember != null) {
+      System.out.println("memId: " + loginMember.getMemId());
+      System.out.println("memName: " + loginMember.getMemName());
+      System.out.println("memAddr: " + loginMember.getMemAddr());
+      System.out.println("memStatus: " + loginMember.getMemStatus());
+    }
+    
     // 삭제된 회원이 로그인 시도하는 경우 체크
     if (loginMember != null && !"ACTIVE".equals(loginMember.getMemStatus())) {
       return null; // 로그인 불가

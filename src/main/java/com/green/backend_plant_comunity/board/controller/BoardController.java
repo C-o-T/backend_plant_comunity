@@ -83,6 +83,7 @@ public class BoardController {
    @GetMapping("/boardDetail/{boardNum}")
    public ResponseEntity<?> getBoardDetail(@PathVariable("boardNum") int boardNum){
       try {
+         boardService.updateCnt(boardNum);
          BoardDTO boardDTO = boardService.getBoardDetail(boardNum);
          return ResponseEntity.status(HttpStatus.OK).body(boardDTO);
       }catch (Exception e){
@@ -115,4 +116,4 @@ public class BoardController {
          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정중 오류남");
       }
    }
-}
+ }

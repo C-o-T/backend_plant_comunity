@@ -61,4 +61,7 @@ public interface BoardMapper {
 
    //좋아요 개수 감소
    public void decreaseLikeCnt(int boardNum);
+
+   //조회수 증가
+   public void updateCnt(int boardNum);
 }
