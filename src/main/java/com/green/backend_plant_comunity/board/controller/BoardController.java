@@ -18,17 +18,27 @@ import java.util.stream.Collectors;
 @RequestMapping("/boards")
 public class BoardController {
    private final BoardService boardService;
-   
+
    //게시글 등록할때 url 미리등록
    @PostMapping("/upload/img")
    public ResponseEntity<?> uploadImg(@RequestParam("img") List<MultipartFile> imgs){
-      List<BoardImgDTO> dtoList = FileUploadUtil.fileUpload(imgs);
-      List<String> imageUrl = dtoList.stream().map(img -> "http://localhost:8080/upload/" + img.getAttachedImgName()).collect(Collectors.toList());
-      for(BoardImgDTO dto : dtoList){
-         dto.setImgUrl("http://localhost:8080/upload/" + dto.getAttachedImgName());
+      try {
+         if (imgs == null || imgs.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미지가 없습니다.");
+         }
+         List<BoardImgDTO> dtoList = FileUploadUtil.fileUpload(imgs);
+         List<String> imageUrl = dtoList.stream()
+                 .map(img -> "http://localhost:8080/upload/" + img.getAttachedImgName())
+                 .collect(Collectors.toList());
+         for(BoardImgDTO dto : dtoList){
+            dto.setImgUrl("http://localhost:8080/upload/" + dto.getAttachedImgName());
+         }
+         boardService.insertUrl(dtoList);
+         return ResponseEntity.ok(imageUrl);
+      } catch (Exception e) {
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업로드 중 오류남");
       }
-      boardService.insertUrl(dtoList);
-      return ResponseEntity.ok(imageUrl);
    }
 
    // 게시글 등록
@@ -46,26 +56,54 @@ public class BoardController {
 
    @GetMapping("/{memId}")
    //마이팜 게시글 조회 api
-   public List<BoardDTO> getMyFarmCommunity(@PathVariable ("memId") String memId ){
-      return boardService.getMyFarmCommunity(memId);
+   public ResponseEntity<?> getMyFarmCommunity(@PathVariable ("memId") String memId ){
+      try {
+         List<BoardDTO> boards = boardService.getMyFarmCommunity(memId);
+         return ResponseEntity.status(HttpStatus.OK).body(boards);
+      } catch (Exception e) {
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회중 오류남");
+      }
    }
 
    @GetMapping("")
    //홈 화면 인기글 조회
-   public List<BoardDTO> getPopularWriting(){
-      return boardService.getPopularWriting();
+   public ResponseEntity<?> getPopularWriting(){
+      try {
+         List<BoardDTO> boards = boardService.getPopularWriting();
+         return ResponseEntity.status(HttpStatus.OK).body(boards);
+      } catch (Exception e) {
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회중 오류남");
+      }
    }
 
    //전체 게시글 조회api
    @GetMapping("/boardList")
-   public List<BoardDTO> getAllBoardList(){
-      return boardService.getAllBoardList();
+   public ResponseEntity<?> getAllBoardList(){
+      try {
+         List<BoardDTO> boards = boardService.getAllBoardList();
+         return ResponseEntity.status(HttpStatus.OK).body(boards);
+      } catch (Exception e) {
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회중 오류남");
+      }
    }
 
    // admin 페이지 단일 게시글 삭제
    @DeleteMapping("/{boardNum}")
-   public int deleteBoardByAdmin(@PathVariable("boardNum") int boardNum) {
-      return boardService.deleteBoardByAdmin(boardNum);
+   public ResponseEntity<?> deleteBoardByAdmin(@PathVariable("boardNum") int boardNum) {
+      try {
+         int result = boardService.deleteBoardByAdmin(boardNum);
+         if (result > 0) {
+            return ResponseEntity.status(HttpStatus.OK).body("게시글이 삭제되었습니다.");
+         } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("게시글을 찾을 수 없습니다.");
+         }
+      } catch (Exception e) {
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제중 오류남");
+      }
    }
 
    //게시글 목록 조회
@@ -82,7 +120,7 @@ public class BoardController {
          return ResponseEntity.status(HttpStatus.OK).body(map);
       }catch (Exception e){
          e.printStackTrace();
-         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
       }
    }
 
@@ -92,6 +130,9 @@ public class BoardController {
       try {
          boardService.updateCnt(boardNum);
          BoardDTO boardDTO = boardService.getBoardDetail(boardNum);
+         if (boardDTO == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("게시글을 찾을 수 없습니다.");
+         }
          return ResponseEntity.status(HttpStatus.OK).body(boardDTO);
       }catch (Exception e){
          e.printStackTrace();
@@ -123,4 +164,4 @@ public class BoardController {
          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정중 오류남");
       }
    }
- }
+}
