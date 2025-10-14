@@ -64,4 +64,18 @@
         FROM COMMENT
         WHERE BOARD_NUM = #{boardNum}
     </select>
+
+    <!--댓글 수정-->
+    <update id="updateComment">
+        UPDATE COMMENT
+        SET CONTENT = #{content}
+        WHERE COMMENT_NUM = #{commentNum}
+    </update>
+
+    <!--댓글 삭제 (대댓글이 있으면 먼저 삭제)-->
+    <delete id="deleteComment">
+        DELETE FROM COMMENT
+        WHERE COMMENT_NUM = #{commentNum}
+           OR PARENT_COMMENT_NUM = #{commentNum}
+    </delete>
 </mapper>

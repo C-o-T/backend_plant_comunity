@@ -45,14 +45,12 @@ public class BoardController {
    @PostMapping("")
    public ResponseEntity<?> writeBoard(@RequestBody BoardDTO boardDTO) {
       try {
-         if (boardDTO == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("게시글 정보가 없습니다.");
-         }
          boardService.writeBoard(boardDTO);
-         return ResponseEntity.status(HttpStatus.CREATED).body("게시글이 등록되었습니다.");
+         // boardDTO에 자동으로 생성된 boardNum이 담김
+         return ResponseEntity.status(HttpStatus.OK).body(boardDTO.getBoardNum());
       } catch (Exception e) {
          e.printStackTrace();
-         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("등록중 오류남");
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 등록 실패");
       }
    }
 

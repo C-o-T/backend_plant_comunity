@@ -19,4 +19,10 @@ public interface CommentMapper {
 
    //게시글의 댓글 총 개수 (댓글 + 대댓글)
    int getCommentCount(int boardNum);
+
+   //댓글 수정
+   void updateComment(CommentDTO commentDTO);
+
+   //댓글 삭제
+   void deleteComment(int commentNum);
 }

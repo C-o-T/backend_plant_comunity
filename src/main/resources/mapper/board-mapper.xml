@@ -42,16 +42,14 @@
 
 
     <!--글쓰기 등록-->
-    <insert id="writeBoard">
+    <insert id="writeBoard" useGeneratedKeys="true" keyProperty="boardNum">
         INSERT INTO BOARD(
-              BOARD_NUM
-            , TITLE
+              TITLE
             , CONTENT
             , MEM_ID
             , CATE_NUM
         )VALUES(
-              #{boardNum}
-            , #{title}
+              #{title}
             , #{content}
             , #{memId}
             , #{cateNum}
@@ -146,8 +144,7 @@
             , B.CREATE_DATE
             , (SELECT IMG_URL FROM BOARD_IMG WHERE BOARD_NUM = B.BOARD_NUM ORDER BY IMG_NUM LIMIT 1) AS IMG_URL
             , (SELECT COUNT(*) FROM COMMENT WHERE BOARD_NUM = B.BOARD_NUM) AS COMMENT_CNT
-        FROM BOARD B LEFT JOIN BOARD_IMG I
-        ON B.BOARD_NUM = I.BOARD_NUM
+        FROM BOARD B
         <where>
             <if test="cateNum != null and cateNum != 0">
                 AND B.CATE_NUM = #{cateNum}

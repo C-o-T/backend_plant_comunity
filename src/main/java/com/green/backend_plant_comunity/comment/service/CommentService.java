@@ -37,4 +37,16 @@ public class CommentService {
    public int getCommentCount(int boardNum){
       return commentMapper.getCommentCount(boardNum);
    }
+
+   //댓글 수정
+   @Transactional(rollbackFor = Exception.class)
+   public void updateComment(CommentDTO commentDTO){
+      commentMapper.updateComment(commentDTO);
+   }
+
+   //댓글 삭제 (대댓글도 함께 삭제)
+   @Transactional(rollbackFor = Exception.class)
+   public void deleteComment(int commentNum){
+      commentMapper.deleteComment(commentNum);
+   }
 }
