@@ -33,8 +33,15 @@ public class BoardController {
 
    // 게시글 등록
    @PostMapping("")
-   public void writeBoard(@RequestBody BoardDTO boardDTO) {
-      boardService.writeBoard(boardDTO);
+   public ResponseEntity<?> writeBoard(@RequestBody BoardDTO boardDTO) {
+      try {
+         boardService.writeBoard(boardDTO);
+         // boardDTO에 자동으로 생성된 boardNum이 담김
+         return ResponseEntity.status(HttpStatus.OK).body(boardDTO.getBoardNum());
+      } catch (Exception e) {
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 등록 실패");
+      }
    }
 
    @GetMapping("/{memId}")

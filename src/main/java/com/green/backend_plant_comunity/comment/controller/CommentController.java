@@ -50,4 +50,29 @@ public class CommentController {
          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("조회중 오류남");
       }
    }
+
+   //댓글 수정
+   @PutMapping("/{commentNum}")
+   public ResponseEntity<?> updateComment(@PathVariable int commentNum, @RequestBody CommentDTO commentDTO){
+      try {
+         commentDTO.setCommentNum(commentNum);
+         commentService.updateComment(commentDTO);
+         return ResponseEntity.status(HttpStatus.OK).body("댓글이 수정되었습니다.");
+      }catch (Exception e){
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("수정중 오류남");
+      }
+   }
+
+   //댓글 삭제
+   @DeleteMapping("/{commentNum}")
+   public ResponseEntity<?> deleteComment(@PathVariable int commentNum){
+      try {
+         commentService.deleteComment(commentNum);
+         return ResponseEntity.status(HttpStatus.OK).body("댓글이 삭제되었습니다.");
+      }catch (Exception e){
+         e.printStackTrace();
+         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제중 오류남");
+      }
+   }
 }
