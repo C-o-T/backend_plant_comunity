@@ -45,21 +45,18 @@
     <insert id="writeBoard" useGeneratedKeys="true" keyProperty="boardNum">
         INSERT INTO BOARD(
               TITLE
+            , BOARD_NUM
             , CONTENT
             , MEM_ID
             , CATE_NUM
         )VALUES(
               #{title}
+            , #{boardNum}
             , #{content}
             , #{memId}
             , #{cateNum}
         )
     </insert>
-
-    <!--BOARD 테이블에 데이터 삽입 시 저장되는 BOARD_NUM을 조회하는 쿼리-->
-    <select id="getNextBoardNum" resultType="int">
-        SELECT IFNULL(MAX(BOARD_NUM), 0) + 1 FROM BOARD
-    </select>
 
     <!--홈 화면 인기글 조회-->
     <select id="getPopularWriting" resultMap="board">

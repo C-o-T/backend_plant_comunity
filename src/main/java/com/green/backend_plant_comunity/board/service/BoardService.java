@@ -18,14 +18,16 @@ public class BoardService {
    @Transactional(rollbackFor = Exception.class)
    public void writeBoard(BoardDTO boardDTO){
       BoardImgDTO boardImgDTO = new BoardImgDTO();
-      int nextBoardNum = boardMapper.getNextBoardNum();
-      boardDTO.setBoardNum(nextBoardNum);
+      
+      // INSERT 수행 - useGeneratedKeys로 자동 생성된 키가 boardDTO.boardNum에 설정됨
       boardMapper.writeBoard(boardDTO);
-
+      int generatedBoardNum = boardDTO.getBoardNum();  // AUTO_INCREMENT로 생성된 실제 번호
+      
       //게시글 내용 가져오기
       String contentHtml = boardDTO.getContent();
 
       System.out.println(contentHtml);
+      System.out.println("생성된 게시글 번호: " + generatedBoardNum);
 
       //글내용에서 img 태그의 src 속성만 추출
       List<String> imgUrls = HtmlImageParser.extractImageUrls(contentHtml);
@@ -35,7 +37,7 @@ public class BoardService {
       for(String url : imgUrls) {
          System.out.println("이미지 등록" + url);
          boardImgDTO.setImgUrl(url);
-         boardImgDTO.setBoardNum(nextBoardNum);
+         boardImgDTO.setBoardNum(generatedBoardNum);  // 실제 생성된 번호 사용
          boardImgDTO.setUsed(true);
          boardMapper.updateImg(boardImgDTO);
       }
