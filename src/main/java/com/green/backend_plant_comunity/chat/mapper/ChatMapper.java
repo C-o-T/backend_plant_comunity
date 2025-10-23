@@ -1,0 +1,57 @@
+package com.green.backend_plant_comunity.chat.mapper;
+
+import com.green.backend_plant_comunity.chat.dto.ChatMessageDTO;
+import com.green.backend_plant_comunity.chat.dto.ChatParticipantDTO;
+import com.green.backend_plant_comunity.chat.dto.ChatRoomDTO;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+@Mapper
+public interface ChatMapper {
+    
+    // ==================== CHAT_ROOM ====================
+    
+    // 채팅방 생성
+    void insertChatRoom(ChatRoomDTO chatRoomDTO);
+    
+    // 채팅방 조회
+    ChatRoomDTO getChatRoom(@Param("roomId") int roomId);
+    
+    // 내 채팅방 목록
+    List<ChatRoomDTO> getMyChatRooms(@Param("memId") String memId);
+    
+    // 마지막 메시지 시간 업데이트
+    void updateLastMessageAt(@Param("roomId") int roomId);
+    
+    // ==================== CHAT_PARTICIPANT ====================
+    
+    // 참여자 추가
+    void insertParticipant(@Param("roomId") int roomId, @Param("memId") String memId);
+    
+    // 채팅방 참여자 목록
+    List<ChatParticipantDTO> getParticipants(@Param("roomId") int roomId);
+    
+    // 채팅방 나가기
+    void leaveChatRoom(@Param("roomId") int roomId, @Param("memId") String memId);
+    
+    // 마지막 읽은 시간 업데이트
+    void updateLastReadAt(@Param("roomId") int roomId, @Param("memId") String memId);
+    
+    // ==================== CHAT_MESSAGE ====================
+    
+    // 메시지 전송
+    void insertMessage(ChatMessageDTO chatMessageDTO);
+    
+    // 채팅방 메시지 목록
+    List<ChatMessageDTO> getMessages(@Param("roomId") int roomId, 
+                                     @Param("limit") int limit, 
+                                     @Param("offset") int offset);
+    
+    // 메시지 삭제
+    void deleteMessage(@Param("msgId") int msgId);
+    
+    // 안 읽은 메시지 수
+    int getUnreadCount(@Param("memId") String memId, @Param("roomId") int roomId);
+}
