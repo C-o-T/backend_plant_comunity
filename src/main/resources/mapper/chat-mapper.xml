@@ -10,6 +10,9 @@
         <result property="createdAt" column="CREATED_AT"/>
         <result property="lastMessageAt" column="LAST_MESSAGE_AT"/>
         <result property="participantCount" column="PARTICIPANT_COUNT"/>
+        <result property="participantIds" column="PARTICIPANT_IDS"/>
+        <result property="lastMessage" column="LAST_MESSAGE"/>
+        <result property="unreadCount" column="UNREAD_COUNT"/>
     </resultMap>
 
     <resultMap id="chatParticipantResultMap" type="com.green.backend_plant_comunity.chat.dto.ChatParticipantDTO">
@@ -62,7 +65,19 @@
              , cr.ROOM_TYPE
              , cr.CREATED_AT
              , cr.LAST_MESSAGE_AT
-             , (SELECT COUNT(*) FROM CHAT_PARTICIPANT WHERE ROOM_ID = cr.ROOM_ID) AS PARTICIPANT_COUNT
+             , (SELECT COUNT(*) FROM CHAT_PARTICIPANT WHERE ROOM_ID = cr.ROOM_ID AND IS_ACTIVE = TRUE) AS PARTICIPANT_COUNT
+             , (SELECT GROUP_CONCAT(MEM_ID) FROM CHAT_PARTICIPANT WHERE ROOM_ID = cr.ROOM_ID AND IS_ACTIVE = TRUE) AS PARTICIPANT_IDS
+             , (SELECT cm.CONTENT
+                FROM CHAT_MESSAGE cm
+                WHERE cm.ROOM_ID = cr.ROOM_ID AND cm.IS_DELETED = FALSE
+                ORDER BY cm.SENT_AT DESC
+                LIMIT 1) AS LAST_MESSAGE
+             , (SELECT COUNT(*)
+                FROM CHAT_MESSAGE cm
+                WHERE cm.ROOM_ID = cr.ROOM_ID
+                  AND cm.SENDER_ID != #{memId}
+                  AND cm.SENT_AT > IFNULL(cp.LAST_READ_AT, '1900-01-01')
+                  AND cm.IS_DELETED = FALSE) AS UNREAD_COUNT
         FROM CHAT_ROOM cr
         JOIN CHAT_PARTICIPANT cp ON cr.ROOM_ID = cp.ROOM_ID
         WHERE cp.MEM_ID = #{memId}
