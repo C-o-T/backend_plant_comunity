@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.backend_plant_comunity.chat.mapper.ChatMapper">
+
+    <!-- resultMap 정의 -->
+    <resultMap id="chatRoomResultMap" type="com.green.backend_plant_comunity.chat.dto.ChatRoomDTO">
+        <id property="roomId" column="ROOM_ID"/>
+        <result property="roomName" column="ROOM_NAME"/>
+        <result property="roomType" column="ROOM_TYPE"/>
+        <result property="createdAt" column="CREATED_AT"/>
+        <result property="lastMessageAt" column="LAST_MESSAGE_AT"/>
+        <result property="participantCount" column="PARTICIPANT_COUNT"/>
+    </resultMap>
+
+    <resultMap id="chatParticipantResultMap" type="com.green.backend_plant_comunity.chat.dto.ChatParticipantDTO">
+        <id property="participantId" column="PARTICIPANT_ID"/>
+        <result property="roomId" column="ROOM_ID"/>
+        <result property="memId" column="MEM_ID"/>
+        <result property="joinedAt" column="JOINED_AT"/>
+        <result property="lastReadAt" column="LAST_READ_AT"/>
+        <result property="isActive" column="IS_ACTIVE"/>
+        <result property="memName" column="MEM_NAME"/>
+        <result property="memEmail" column="MEM_EMAIL"/>
+    </resultMap>
+
+    <resultMap id="chatMessageResultMap" type="com.green.backend_plant_comunity.chat.dto.ChatMessageDTO">
+        <id property="msgId" column="MSG_ID"/>
+        <result property="roomId" column="ROOM_ID"/>
+        <result property="senderId" column="SENDER_ID"/>
+        <result property="messageType" column="MESSAGE_TYPE"/>
+        <result property="content" column="CONTENT"/>
+        <result property="fileUrl" column="FILE_URL"/>
+        <result property="sentAt" column="SENT_AT"/>
+        <result property="isDeleted" column="IS_DELETED"/>
+        <result property="senderName" column="SENDER_NAME"/>
+        <result property="senderEmail" column="SENDER_EMAIL"/>
+    </resultMap>
+
+    <!-- ==================== CHAT_ROOM ==================== -->
+    
+    <!-- 채팅방 생성 -->
+    <insert id="insertChatRoom" useGeneratedKeys="true" keyProperty="roomId">
+        INSERT INTO CHAT_ROOM (ROOM_NAME, ROOM_TYPE)
+        VALUES (#{roomName}, #{roomType})
+    </insert>
+
+    <!-- 채팅방 조회 -->
+    <select id="getChatRoom" resultMap="chatRoomResultMap">
+        SELECT ROOM_ID
+             , ROOM_NAME
+             , ROOM_TYPE
+             , CREATED_AT
+             , LAST_MESSAGE_AT
+        FROM CHAT_ROOM
+        WHERE ROOM_ID = #{roomId}
+    </select>
+
+    <!-- 내 채팅방 목록 -->
+    <select id="getMyChatRooms" resultMap="chatRoomResultMap">
+        SELECT cr.ROOM_ID
+             , cr.ROOM_NAME
+             , cr.ROOM_TYPE
+             , cr.CREATED_AT
+             , cr.LAST_MESSAGE_AT
+             , (SELECT COUNT(*) FROM CHAT_PARTICIPANT WHERE ROOM_ID = cr.ROOM_ID) AS PARTICIPANT_COUNT
+        FROM CHAT_ROOM cr
+        JOIN CHAT_PARTICIPANT cp ON cr.ROOM_ID = cp.ROOM_ID
+        WHERE cp.MEM_ID = #{memId}
+          AND cp.IS_ACTIVE = TRUE
+        ORDER BY cr.LAST_MESSAGE_AT DESC
+    </select>
+
+    <!-- 마지막 메시지 시간 업데이트 -->
+    <update id="updateLastMessageAt">
+        UPDATE CHAT_ROOM
+        SET LAST_MESSAGE_AT = NOW()
+        WHERE ROOM_ID = #{roomId}
+    </update>
+
+    <!-- ==================== CHAT_PARTICIPANT ==================== -->
+
+    <!-- 참여자 추가 -->
+    <insert id="insertParticipant">
+        INSERT INTO CHAT_PARTICIPANT (ROOM_ID, MEM_ID)
+        VALUES (#{roomId}, #{memId})
+    </insert>
+
+    <!-- 채팅방 참여자 목록 -->
+    <select id="getParticipants" resultMap="chatParticipantResultMap">
+        SELECT cp.PARTICIPANT_ID
+             , cp.ROOM_ID
+             , cp.MEM_ID
+             , cp.JOINED_AT
+             , cp.LAST_READ_AT
+             , cp.IS_ACTIVE
+             , m.MEM_NAME
+             , m.MEM_EMAIL
+        FROM CHAT_PARTICIPANT cp
+        JOIN MEMBER m ON cp.MEM_ID = m.MEM_ID
+        WHERE cp.ROOM_ID = #{roomId}
+          AND cp.IS_ACTIVE = TRUE
+    </select>
+
+    <!-- 채팅방 나가기 -->
+    <update id="leaveChatRoom">
+        UPDATE CHAT_PARTICIPANT
+        SET IS_ACTIVE = FALSE
+        WHERE ROOM_ID = #{roomId}
+          AND MEM_ID = #{memId}
+    </update>
+
+    <!-- 마지막 읽은 시간 업데이트 -->
+    <update id="updateLastReadAt">
+        UPDATE CHAT_PARTICIPANT
+        SET LAST_READ_AT = NOW()
+        WHERE ROOM_ID = #{roomId}
+          AND MEM_ID = #{memId}
+    </update>
+
+    <!-- ==================== CHAT_MESSAGE ==================== -->
+
+    <!-- 메시지 전송 -->
+    <insert id="insertMessage" useGeneratedKeys="true" keyProperty="msgId">
+        INSERT INTO CHAT_MESSAGE (ROOM_ID, SENDER_ID, MESSAGE_TYPE, CONTENT, FILE_URL)
+        VALUES (#{roomId}, #{senderId}, #{messageType}, #{content}, #{fileUrl})
+    </insert>
+
+    <!-- 채팅방 메시지 목록 -->
+    <select id="getMessages" resultMap="chatMessageResultMap">
+        SELECT cm.MSG_ID
+             , cm.ROOM_ID
+             , cm.SENDER_ID
+             , cm.MESSAGE_TYPE
+             , cm.CONTENT
+             , cm.FILE_URL
+             , cm.SENT_AT
+             , cm.IS_DELETED
+             , m.MEM_NAME AS SENDER_NAME
+             , m.MEM_EMAIL AS SENDER_EMAIL
+        FROM CHAT_MESSAGE cm
+        JOIN MEMBER m ON cm.SENDER_ID = m.MEM_ID
+        WHERE cm.ROOM_ID = #{roomId}
+          AND cm.IS_DELETED = FALSE
+        ORDER BY cm.SENT_AT ASC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <!-- 메시지 삭제 -->
+    <update id="deleteMessage">
+        UPDATE CHAT_MESSAGE
+        SET IS_DELETED = TRUE
+        WHERE MSG_ID = #{msgId}
+    </update>
+
+    <!-- 안 읽은 메시지 수 -->
+    <select id="getUnreadCount" resultType="int">
+        SELECT COUNT(*)
+        FROM CHAT_MESSAGE cm
+        JOIN CHAT_PARTICIPANT cp ON cm.ROOM_ID = cp.ROOM_ID
+        WHERE cp.MEM_ID = #{memId}
+          AND cm.ROOM_ID = #{roomId}
+          AND cm.SENDER_ID != #{memId}
+          AND cm.SENT_AT > IFNULL(cp.LAST_READ_AT, '1900-01-01')
+          AND cm.IS_DELETED = FALSE
+    </select>
+
+</mapper>

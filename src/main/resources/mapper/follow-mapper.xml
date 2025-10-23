@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.backend_plant_comunity.follow.mapper.FollowMapper">
+
+    <!-- resultMap 정의 -->
+    <resultMap id="followResultMap" type="com.green.backend_plant_comunity.follow.dto.FollowDTO">
+        <id property="followId" column="FOLLOW_ID"/>
+        <result property="followerId" column="FOLLOWER_ID"/>
+        <result property="followingId" column="FOLLOWING_ID"/>
+        <result property="followedAt" column="FOLLOWED_AT"/>
+        <result property="followerName" column="FOLLOWER_NAME"/>
+        <result property="followerEmail" column="FOLLOWER_EMAIL"/>
+        <result property="followingName" column="FOLLOWING_NAME"/>
+        <result property="followingEmail" column="FOLLOWING_EMAIL"/>
+    </resultMap>
+
+    <!-- 팔로우하기 -->
+    <insert id="insertFollow">
+        INSERT INTO FOLLOW (FOLLOWER_ID, FOLLOWING_ID)
+        VALUES (#{followerId}, #{followingId})
+    </insert>
+
+    <!-- 언팔로우하기 -->
+    <delete id="deleteFollow">
+        DELETE FROM FOLLOW
+        WHERE FOLLOWER_ID = #{followerId}
+          AND FOLLOWING_ID = #{followingId}
+    </delete>
+
+    <!-- 팔로우 여부 확인 -->
+    <select id="isFollowing" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM FOLLOW
+            WHERE FOLLOWER_ID = #{followerId}
+              AND FOLLOWING_ID = #{followingId}
+        ) AS is_following
+    </select>
+
+    <!-- 내가 팔로우한 사람 목록 (팔로잉) -->
+    <select id="getFollowingList" resultMap="followResultMap">
+        SELECT f.FOLLOW_ID
+             , f.FOLLOWER_ID
+             , f.FOLLOWING_ID
+             , f.FOLLOWED_AT
+             , m.MEM_NAME AS FOLLOWING_NAME
+             , m.MEM_EMAIL AS FOLLOWING_EMAIL
+        FROM FOLLOW f
+        JOIN MEMBER m ON f.FOLLOWING_ID = m.MEM_ID
+        WHERE f.FOLLOWER_ID = #{memId}
+        ORDER BY f.FOLLOWED_AT DESC
+    </select>
+
+    <!-- 나를 팔로우하는 사람 목록 (팔로워) -->
+    <select id="getFollowerList" resultMap="followResultMap">
+        SELECT f.FOLLOW_ID
+             , f.FOLLOWER_ID
+             , f.FOLLOWING_ID
+             , f.FOLLOWED_AT
+             , m.MEM_NAME AS FOLLOWER_NAME
+             , m.MEM_EMAIL AS FOLLOWER_EMAIL
+        FROM FOLLOW f
+        JOIN MEMBER m ON f.FOLLOWER_ID = m.MEM_ID
+        WHERE f.FOLLOWING_ID = #{memId}
+        ORDER BY f.FOLLOWED_AT DESC
+    </select>
+
+    <!-- 팔로잉 수 -->
+    <select id="getFollowingCount" resultType="int">
+        SELECT COUNT(*)
+        FROM FOLLOW
+        WHERE FOLLOWER_ID = #{memId}
+    </select>
+
+    <!-- 팔로워 수 -->
+    <select id="getFollowerCount" resultType="int">
+        SELECT COUNT(*)
+        FROM FOLLOW
+        WHERE FOLLOWING_ID = #{memId}
+    </select>
+
+    <!-- 맞팔 목록 (서로 팔로우) -->
+    <select id="getMutualFollowList" resultMap="followResultMap">
+        SELECT f1.FOLLOWING_ID
+             , m.MEM_NAME AS FOLLOWING_NAME
+             , m.MEM_EMAIL AS FOLLOWING_EMAIL
+        FROM FOLLOW f1
+        JOIN FOLLOW f2 ON f1.FOLLOWER_ID = f2.FOLLOWING_ID
+                      AND f1.FOLLOWING_ID = f2.FOLLOWER_ID
+        JOIN MEMBER m ON f1.FOLLOWING_ID = m.MEM_ID
+        WHERE f1.FOLLOWER_ID = #{memId}
+        ORDER BY f1.FOLLOWED_AT DESC
+    </select>
+
+</mapper>
