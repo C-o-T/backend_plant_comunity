@@ -24,7 +24,10 @@ public interface ChatMapper {
     
     // 마지막 메시지 시간 업데이트
     void updateLastMessageAt(@Param("roomId") int roomId);
-    
+
+    // 1:1 채팅방 존재 여부 확인
+    Integer findDirectChatRoom(@Param("memId1") String memId1, @Param("memId2") String memId2);
+
     // ==================== CHAT_PARTICIPANT ====================
     
     // 참여자 추가

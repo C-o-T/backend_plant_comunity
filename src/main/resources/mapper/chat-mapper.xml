@@ -92,6 +92,27 @@
         WHERE ROOM_ID = #{roomId}
     </update>
 
+    <!-- 1:1 채팅방 존재 여부 확인 -->
+    <select id="findDirectChatRoom" resultType="java.lang.Integer">
+        SELECT cr.ROOM_ID
+        FROM CHAT_ROOM cr
+        WHERE cr.ROOM_TYPE = 'DIRECT'
+          AND EXISTS (
+              SELECT 1 FROM CHAT_PARTICIPANT cp1
+              WHERE cp1.ROOM_ID = cr.ROOM_ID
+                AND cp1.MEM_ID = #{memId1}
+                AND cp1.IS_ACTIVE = TRUE
+          )
+          AND EXISTS (
+              SELECT 1 FROM CHAT_PARTICIPANT cp2
+              WHERE cp2.ROOM_ID = cr.ROOM_ID
+                AND cp2.MEM_ID = #{memId2}
+                AND cp2.IS_ACTIVE = TRUE
+          )
+          AND (SELECT COUNT(*) FROM CHAT_PARTICIPANT WHERE ROOM_ID = cr.ROOM_ID AND IS_ACTIVE = TRUE) = 2
+        LIMIT 1
+    </select>
+
     <!-- ==================== CHAT_PARTICIPANT ==================== -->
 
     <!-- 참여자 추가 -->
