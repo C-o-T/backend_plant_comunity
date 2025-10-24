@@ -21,15 +21,24 @@ public class ChatService {
     // 채팅방 생성 (1:1)
     @Transactional
     public int createDirectChatRoom(String memId1, String memId2) {
+        // 기존 채팅방이 있는지 확인
+        Integer existingRoomId = chatMapper.findDirectChatRoom(memId1, memId2);
+
+        if (existingRoomId != null) {
+            // 이미 존재하면 기존 채팅방 ID 반환
+            return existingRoomId;
+        }
+
+        // 새로운 채팅방 생성
         ChatRoomDTO chatRoomDTO = new ChatRoomDTO();
         chatRoomDTO.setRoomType("DIRECT");
-        
+
         chatMapper.insertChatRoom(chatRoomDTO);
         int roomId = chatRoomDTO.getRoomId();
-        
+
         chatMapper.insertParticipant(roomId, memId1);
         chatMapper.insertParticipant(roomId, memId2);
-        
+
         return roomId;
     }
     
