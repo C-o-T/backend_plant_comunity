@@ -85,7 +85,23 @@ public class ChatService {
     // 채팅방 나가기
     @Transactional
     public void leaveChatRoom(int roomId, String memId) {
+        // 채팅방 나가기 (참여자 IS_ACTIVE = FALSE)
         chatMapper.leaveChatRoom(roomId, memId);
+
+        // 남은 활성 참여자 수 확인
+        int activeParticipants = chatMapper.countActiveParticipants(roomId);
+
+        // 참여자가 0명이면 채팅방 완전 삭제
+        if (activeParticipants == 0) {
+            // 1. 메시지 삭제
+            chatMapper.deleteChatMessages(roomId);
+            // 2. 참여자 삭제
+            chatMapper.deleteChatParticipants(roomId);
+            // 3. 채팅방 삭제
+            chatMapper.deleteChatRoom(roomId);
+
+            System.out.println("📌 채팅방 " + roomId + " 완전 삭제 (참여자 0명)");
+        }
     }
     
     // 마지막 읽은 시간 업데이트
