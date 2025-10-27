@@ -1,6 +1,7 @@
 package com.green.backend_plant_comunity.member.mapper;
 
 import com.green.backend_plant_comunity.member.dto.MemberDTO;
+import com.green.backend_plant_comunity.member.dto.MemberProfileDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -56,4 +57,16 @@ public interface MemberMapper {
 
     // [일반회원] 회원 탈퇴
     int withdrawMember(@Param("memId") String memId);
+
+    // 프로필 이미지 등록
+    int insertProfile(MemberProfileDTO memberProfileDTO);
+
+    // 프로필 이미지 수정
+    int updateProfile(MemberProfileDTO memberProfileDTO);
+
+    // 회원의 프로필 이미지 조회
+    MemberProfileDTO getProfileByMemId(@Param("memId") String memId);
+
+    // 프로필 이미지 삭제
+    int deleteProfile(@Param("memId") String memId);
 }
