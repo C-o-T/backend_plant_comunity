@@ -53,7 +53,7 @@ public class BoardController {
          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 등록 실패");
       }
    }
-
+//
    @GetMapping("/{memId}")
    //마이팜 게시글 조회 api
    public ResponseEntity<?> getMyFarmCommunity(@PathVariable ("memId") String memId ){
