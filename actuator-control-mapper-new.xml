@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.green.backend_plant_comunity.environment.mapper.ActuatorControlMapper">
+
+    <!-- ActuatorControlDTO ResultMap -->
+    <resultMap id="actuatorControl" type="com.green.backend_plant_comunity.environment.dto.ActuatorControlDTO">
+        <id     column="CONTROL_ID"     property="controlId"/>
+        <result column="ACT_NAME"       property="actName"/>
+        <result column="RASP_NUM"       property="raspNum"/>
+        <result column="COMMAND"        property="command"/>
+        <result column="MODE"           property="mode"/>
+        <result column="CREATED_TIME"   property="createdTime"/>
+        <result column="PROCESSED"      property="processed"/>
+    </resultMap>
+
+    <!-- ActuatorLogDTO ResultMap - MODE 필드 추가 -->
+    <resultMap id="actuatorLog" type="com.green.backend_plant_comunity.environment.dto.ActuatorLogDTO">
+        <id     column="LOG_ID"         property="logId"/>
+        <result column="ACT_NAME"       property="actName"/>
+        <result column="RASP_NUM"       property="raspNum"/>
+        <result column="STATE"          property="state"/>
+        <result column="MODE"           property="mode"/>
+        <result column="EVENT_TIME"     property="eventTime"/>
+    </resultMap>
+
+    <!-- 제어 명령 삽입 -->
+    <insert id="insertControlCommand" parameterType="com.green.backend_plant_comunity.environment.dto.ActuatorControlDTO">  
+        INSERT INTO ACTUATOR_CONTROL (
+            ACT_NAME,
+            RASP_NUM,
+            COMMAND,
+            MODE,
+            CREATED_TIME,
+            PROCESSED
+        ) VALUES (
+            #{actName},
+            #{raspNum},
+            #{command},
+            #{mode},
+            NOW(),
+            FALSE
+        )
+    </insert>
+
+    <!-- 특정 액추에이터의 최신 상태 조회 - MODE 포함 -->
+    <select id="getLatestStatus" resultMap="actuatorLog">
+        SELECT
+            l.LOG_ID,
+            l.ACT_NAME,
+            l.RASP_NUM,
+            l.STATE,
+            l.EVENT_TIME,
+            COALESCE(
+                (SELECT c.MODE
+                 FROM ACTUATOR_CONTROL c
+                 WHERE c.RASP_NUM = l.RASP_NUM
+                   AND c.ACT_NAME = l.ACT_NAME
+                   AND c.PROCESSED = TRUE
+                 ORDER BY c.CREATED_TIME DESC
+                 LIMIT 1),
+                'AUTO'
+            ) AS MODE
+        FROM ACTUATOR_LOG l
+        WHERE l.RASP_NUM = #{raspNum}
+          AND l.ACT_NAME = #{actName}
+        ORDER BY l.EVENT_TIME DESC
+        LIMIT 1
+    </select>
+
+    <!-- 액추에이터 로그 조회 (필터링 가능) -->
+    <select id="getActuatorLogs" resultMap="actuatorLog">
+        SELECT
+            LOG_ID,
+            ACT_NAME,
+            RASP_NUM,
+            STATE,
+            EVENT_TIME,
+            'AUTO' AS MODE
+        FROM ACTUATOR_LOG
+        WHERE RASP_NUM = #{raspNum}
+        <if test="actName != null and actName != ''">
+            AND ACT_NAME = #{actName}
+        </if>
+        ORDER BY EVENT_TIME DESC
+        <if test="limit > 0">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <!-- 제어 명령 히스토리 조회 -->
+    <select id="getControlHistory" resultMap="actuatorControl">
+        SELECT
+            CONTROL_ID,
+            ACT_NAME,
+            RASP_NUM,
+            COMMAND,
+            MODE,
+            CREATED_TIME,
+            PROCESSED
+        FROM ACTUATOR_CONTROL
+        WHERE RASP_NUM = #{raspNum}
+        <if test="actName != null and actName != ''">
+            AND ACT_NAME = #{actName}
+        </if>
+        ORDER BY CREATED_TIME DESC
+        LIMIT 100
+    </select>
+
+</mapper>
