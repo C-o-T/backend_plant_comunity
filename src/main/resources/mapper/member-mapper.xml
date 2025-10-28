@@ -17,6 +17,14 @@
         <result column="MEM_STATUS"         property="memStatus" />
     </resultMap>
 
+    <resultMap id="memberProfile" type="com.green.backend_plant_comunity.member.dto.MemberProfileDTO">
+        <id     column="PROFILE_NO"          property="profileNo" />
+        <result column="MEM_ID"              property="memId" />
+        <result column="PROFILE_IMAGE_URL"   property="profileImageUrl" />
+        <result column="PROFILE_IMAGE_NAME"  property="profileImageName" />
+        <result column="UPLOAD_DATE"         property="uploadDate" />
+    </resultMap>
+
     <!--회원가입 버튼 누르면 실행할 쿼리-->
     <insert id="joinMember">
         INSERT INTO member(
@@ -259,7 +267,7 @@
     </update>
 
     <!-- 회원의 프로필 이미지 조회 -->
-    <select id="getProfileByMemId" resultType="com.green.backend_plant_comunity.member.dto.MemberProfileDTO">
+    <select id="getProfileByMemId" resultMap="memberProfile">
         SELECT
             PROFILE_NO,
             MEM_ID,
