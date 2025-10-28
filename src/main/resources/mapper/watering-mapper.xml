@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.green.backend_plant_comunity.calendar.mapper.WateringMapper">
+
+    <!-- ResultMap 정의 -->
+    <resultMap id="watering" type="com.green.backend_plant_comunity.calendar.dto.CalendarEventDTO">
+        <id property="wateringId" column="WATERING_ID"/>
+        <result property="memId" column="MEM_ID"/>
+        <result property="plantName" column="PLANT_NAME"/>
+        <result property="wateringDate" column="WATERING_DATE"/>
+        <result property="cycleDay" column="CYCLE_DAY"/>
+        <result property="createdAt" column="CREATED_AT"/>
+    </resultMap>
+
+    <!-- 물주기 일정 추가 -->
+    <insert id="insertWatering">
+        INSERT INTO WATERING_SCHEDULE (
+            MEM_ID,
+            PLANT_NAME,
+            WATERING_DATE,
+            CYCLE_DAY,
+            CREATED_AT
+        ) VALUES (
+            #{memId},
+            #{plantName},
+            #{wateringDate},
+            #{cycleDay},
+            NOW()
+        )
+    </insert>
+
+    <!-- 특정 회원의 물주기 일정 조회 -->
+    <select id="getWateringsByMemId" resultMap="watering">
+        SELECT
+            WATERING_ID,
+            MEM_ID,
+            PLANT_NAME,
+            WATERING_DATE,
+            CYCLE_DAY,
+            CREATED_AT
+        FROM WATERING_SCHEDULE
+        WHERE MEM_ID = #{memId}
+        ORDER BY WATERING_DATE ASC
+    </select>
+
+    <!-- 물주기 일정 삭제 -->
+    <delete id="deleteWatering">
+        DELETE FROM WATERING_SCHEDULE
+        WHERE WATERING_ID = #{wateringId}
+    </delete>
+
+</mapper>
