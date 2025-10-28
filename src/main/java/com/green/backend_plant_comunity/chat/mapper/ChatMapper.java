@@ -57,4 +57,18 @@ public interface ChatMapper {
     
     // 안 읽은 메시지 수
     int getUnreadCount(@Param("memId") String memId, @Param("roomId") int roomId);
+
+    // ==================== CHAT_ROOM DELETE ====================
+
+    // 활성 참여자 수 조회
+    int countActiveParticipants(@Param("roomId") int roomId);
+
+    // 채팅방 메시지 삭제
+    void deleteChatMessages(@Param("roomId") int roomId);
+
+    // 채팅방 참여자 삭제
+    void deleteChatParticipants(@Param("roomId") int roomId);
+
+    // 채팅방 삭제
+    void deleteChatRoom(@Param("roomId") int roomId);
 }
