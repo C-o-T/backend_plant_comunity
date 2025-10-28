@@ -6,6 +6,7 @@ import com.green.backend_plant_comunity.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -40,6 +41,7 @@ public class MemberService {
     }
 
     // 로그인
+    @Transactional(readOnly = true)
     public MemberDTO login(MemberDTO memberDTO) {
         MemberDTO member = memberMapper.login(memberDTO);
 
@@ -113,6 +115,7 @@ public class MemberService {
     private String uploadDir;
 
     // 프로필 이미지 업로드 및 저장
+    @Transactional
     public Map<String, String> uploadProfileImage(MultipartFile file, String memId) throws IOException {
         // 프로필 전용 디렉토리 생성
         String profileDir = uploadDir + "profile/";

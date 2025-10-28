@@ -45,7 +45,14 @@ public class MemberController {
     // 로그인
     @GetMapping("/login")
     public MemberDTO login(MemberDTO memberDTO) {
-        return memberService.login(memberDTO);
+        System.out.println("========================================");
+        System.out.println("로그인 API 호출됨!!!");
+        System.out.println("요청 ID: " + memberDTO.getMemId());
+        System.out.println("========================================");
+        MemberDTO result = memberService.login(memberDTO);
+        System.out.println("로그인 결과 프로필URL: " + (result != null ? result.getProfileImageUrl() : "null"));
+        System.out.println("========================================");
+        return result;
     }
 
     // 아이디 찾기

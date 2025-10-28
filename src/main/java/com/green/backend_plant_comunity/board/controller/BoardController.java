@@ -28,10 +28,10 @@ public class BoardController {
          }
          List<BoardImgDTO> dtoList = FileUploadUtil.fileUpload(imgs);
          List<String> imageUrl = dtoList.stream()
-                 .map(img -> "http://localhost:8080/upload/" + img.getAttachedImgName())
+                 .map(img -> "http://192.168.30.97:8080/upload/" + img.getAttachedImgName())
                  .collect(Collectors.toList());
          for(BoardImgDTO dto : dtoList){
-            dto.setImgUrl("http://localhost:8080/upload/" + dto.getAttachedImgName());
+            dto.setImgUrl("http://192.168.30.97:8080/upload/" + dto.getAttachedImgName());
          }
          boardService.insertUrl(dtoList);
          return ResponseEntity.ok(imageUrl);
