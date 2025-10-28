@@ -230,10 +230,54 @@
 
     <!-- [일반회원] 회원 탈퇴 -->
     <update id="withdrawMember">
-        UPDATE MEMBER 
+        UPDATE MEMBER
         SET MEM_STATUS = 'WITHDRAWN'
         WHERE MEM_ID = #{memId}
         AND MEM_STATUS = 'ACTIVE'
     </update>
+
+    <!-- 프로필 이미지 등록 -->
+    <insert id="insertProfile">
+        INSERT INTO member_profile (
+            MEM_ID,
+            PROFILE_IMAGE_URL,
+            PROFILE_IMAGE_NAME
+        ) VALUES (
+            #{memId},
+            #{profileImageUrl},
+            #{profileImageName}
+        )
+    </insert>
+
+    <!-- 프로필 이미지 수정 -->
+    <update id="updateProfile">
+        UPDATE member_profile
+        SET PROFILE_IMAGE_URL = #{profileImageUrl},
+            PROFILE_IMAGE_NAME = #{profileImageName},
+            UPLOAD_DATE = CURRENT_TIMESTAMP
+        WHERE MEM_ID = #{memId}
+    </update>
+
+    <!-- 회원의 프로필 이미지 조회 -->
+    <select id="getProfileByMemId" resultType="com.green.backend_plant_comunity.member.dto.MemberProfileDTO">
+        SELECT
+            PROFILE_NO,
+            MEM_ID,
+            PROFILE_IMAGE_URL,
+            PROFILE_IMAGE_NAME,
+            UPLOAD_DATE
+        FROM
+            member_profile
+        WHERE
+            MEM_ID = #{memId}
+        ORDER BY UPLOAD_DATE DESC
+        LIMIT 1
+    </select>
+
+    <!-- 프로필 이미지 삭제 -->
+    <delete id="deleteProfile">
+        DELETE FROM member_profile
+        WHERE MEM_ID = #{memId}
+    </delete>
 
 </mapper>
