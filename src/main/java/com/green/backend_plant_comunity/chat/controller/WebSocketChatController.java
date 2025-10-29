@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
@@ -14,8 +15,9 @@ import java.time.LocalDateTime;
 @Controller
 @RequiredArgsConstructor
 public class WebSocketChatController {
-    
+
     private final ChatService chatService;
+    private final SimpMessagingTemplate messagingTemplate;
     
     // 채팅방에 메시지 전송
     @MessageMapping("/chat.send/{roomId}")
@@ -28,6 +30,10 @@ public class WebSocketChatController {
         // DB에 메시지 저장 (임시 주석 - 테스트용)
         chatMessageDTO.setSentAt(LocalDateTime.now());
         // chatService.sendMessage(chatMessageDTO);  // TODO: 로그인 기능 구현 후 활성화
+
+        // 채팅방 목록 실시간 업데이트를 위해 전체 구독자에게도 브로드캐스트
+        messagingTemplate.convertAndSend("/topic/messages", chatMessageDTO);
+        System.out.println("📢 전체 브로드캐스트: /topic/messages");
 
         // 실시간으로 모든 구독자에게 전송
         return chatMessageDTO;
