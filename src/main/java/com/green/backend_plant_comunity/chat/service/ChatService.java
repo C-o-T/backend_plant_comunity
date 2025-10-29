@@ -83,8 +83,18 @@ public class ChatService {
     // 참여자 추가
     @Transactional
     public void addParticipant(int roomId, String memId) {
-        // 참여자 추가
-        chatMapper.insertParticipant(roomId, memId);
+        // 이미 참여한 적이 있는지 확인
+        Integer existsCount = chatMapper.checkParticipantExists(roomId, memId);
+
+        if (existsCount != null && existsCount > 0) {
+            // 이미 참여한 적이 있으면 재활성화
+            chatMapper.reactivateParticipant(roomId, memId);
+            System.out.println("✅ 참여자 재활성화: 채팅방 " + roomId + ", 사용자 " + memId);
+        } else {
+            // 처음 참여하는 경우 새로 추가
+            chatMapper.insertParticipant(roomId, memId);
+            System.out.println("✅ 새 참여자 추가: 채팅방 " + roomId + ", 사용자 " + memId);
+        }
 
         // 채팅방 정보 조회
         ChatRoomDTO chatRoom = chatMapper.getChatRoom(roomId);
