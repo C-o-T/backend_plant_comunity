@@ -121,6 +121,24 @@
         VALUES (#{roomId}, #{memId})
     </insert>
 
+    <!-- 참여자 재활성화 -->
+    <update id="reactivateParticipant">
+        UPDATE CHAT_PARTICIPANT
+        SET IS_ACTIVE = TRUE,
+            JOINED_AT = NOW(),
+            LAST_READ_AT = NOW()
+        WHERE ROOM_ID = #{roomId}
+          AND MEM_ID = #{memId}
+    </update>
+
+    <!-- 참여자 존재 여부 확인 -->
+    <select id="checkParticipantExists" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM CHAT_PARTICIPANT
+        WHERE ROOM_ID = #{roomId}
+          AND MEM_ID = #{memId}
+    </select>
+
     <!-- 채팅방 참여자 목록 -->
     <select id="getParticipants" resultMap="chatParticipantResultMap">
         SELECT cp.PARTICIPANT_ID

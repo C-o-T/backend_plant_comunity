@@ -38,7 +38,13 @@ public interface ChatMapper {
     
     // 참여자 추가
     void insertParticipant(@Param("roomId") int roomId, @Param("memId") String memId);
-    
+
+    // 참여자 재활성화 (나갔다가 다시 들어올 때)
+    void reactivateParticipant(@Param("roomId") int roomId, @Param("memId") String memId);
+
+    // 참여자 존재 여부 확인
+    Integer checkParticipantExists(@Param("roomId") int roomId, @Param("memId") String memId);
+
     // 채팅방 참여자 목록
     List<ChatParticipantDTO> getParticipants(@Param("roomId") int roomId);
     
