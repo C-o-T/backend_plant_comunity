@@ -28,6 +28,12 @@ public interface ChatMapper {
     // 1:1 채팅방 존재 여부 확인
     Integer findDirectChatRoom(@Param("memId1") String memId1, @Param("memId2") String memId2);
 
+    // 채팅방 타입 변경
+    void updateRoomType(@Param("roomId") int roomId, @Param("roomType") String roomType);
+
+    // 채팅방 이름 변경
+    void updateRoomName(@Param("roomId") int roomId, @Param("roomName") String roomName);
+
     // ==================== CHAT_PARTICIPANT ====================
     
     // 참여자 추가
