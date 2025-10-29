@@ -7,7 +7,9 @@ import com.green.backend_plant_comunity.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,6 +131,16 @@ public class ChatController {
         int unreadCount = chatService.getUnreadCount(memId, roomId);
         Map<String, Integer> result = new HashMap<>();
         result.put("unreadCount", unreadCount);
+        return ResponseEntity.ok(result);
+    }
+
+    // 채팅 파일 업로드
+    @PostMapping("/upload")
+    public ResponseEntity<Map<String, String>> uploadChatFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("roomId") int roomId,
+            @RequestParam("senderId") String senderId) throws IOException {
+        Map<String, String> result = chatService.uploadChatFile(file, roomId, senderId);
         return ResponseEntity.ok(result);
     }
 }
