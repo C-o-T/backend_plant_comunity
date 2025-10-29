@@ -83,7 +83,21 @@ public class ChatService {
     // 참여자 추가
     @Transactional
     public void addParticipant(int roomId, String memId) {
+        // 참여자 추가
         chatMapper.insertParticipant(roomId, memId);
+
+        // 채팅방 정보 조회
+        ChatRoomDTO chatRoom = chatMapper.getChatRoom(roomId);
+
+        // DIRECT 타입이면서 활성 참여자가 3명 이상이면 GROUP으로 변경
+        if ("DIRECT".equals(chatRoom.getRoomType())) {
+            int activeParticipants = chatMapper.countActiveParticipants(roomId);
+            if (activeParticipants >= 3) {
+                // 채팅방 타입을 GROUP으로 변경 (이름은 프론트엔드에서 동적으로 표시)
+                chatMapper.updateRoomType(roomId, "GROUP");
+                System.out.println("🔄 채팅방 " + roomId + " 타입 변경: DIRECT → GROUP (참여자 " + activeParticipants + "명)");
+            }
+        }
     }
     
     // 채팅방 참여자 목록

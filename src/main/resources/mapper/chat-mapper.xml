@@ -226,4 +226,18 @@
         WHERE ROOM_ID = #{roomId}
     </delete>
 
+    <!-- 채팅방 타입 변경 -->
+    <update id="updateRoomType">
+        UPDATE CHAT_ROOM
+        SET ROOM_TYPE = #{roomType}
+        WHERE ROOM_ID = #{roomId}
+    </update>
+
+    <!-- 채팅방 이름 변경 -->
+    <update id="updateRoomName">
+        UPDATE CHAT_ROOM
+        SET ROOM_NAME = #{roomName}
+        WHERE ROOM_ID = #{roomId}
+    </update>
+
 </mapper>
