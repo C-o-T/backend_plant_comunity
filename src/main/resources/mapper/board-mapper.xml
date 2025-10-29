@@ -141,7 +141,10 @@
             , B.CREATE_DATE
             , (SELECT IMG_URL FROM BOARD_IMG WHERE BOARD_NUM = B.BOARD_NUM ORDER BY IMG_NUM LIMIT 1) AS IMG_URL
             , (SELECT COUNT(*) FROM COMMENT WHERE BOARD_NUM = B.BOARD_NUM) AS COMMENT_CNT
+            , C.CATE_NAME
+            , C.CATE_NUM AS CATEGORY_CATE_NUM
         FROM BOARD B
+        LEFT JOIN CATEGORY C ON B.CATE_NUM = C.CATE_NUM
         <where>
             <if test="cateNum != null and cateNum != 0">
                 AND B.CATE_NUM = #{cateNum}
@@ -155,13 +158,13 @@
                         AND B.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
                     </when>
                     <when test="searchType == 'titleAndContent'">
-                        AND (B.TITLE LIKE CONCAT('%', #{searchKeyword}, '%') 
+                        AND (B.TITLE LIKE CONCAT('%', #{searchKeyword}, '%')
                              OR B.CONTENT LIKE CONCAT('%', #{searchKeyword}, '%'))
                     </when>
                 </choose>
             </if>
         </where>
-        ORDER BY CREATE_DATE DESC
+        ORDER BY B.CREATE_DATE DESC
         LIMIT #{displayCnt} OFFSET #{offsetCnt}
     </select>
 
@@ -194,17 +197,20 @@
     <!--게시글 상세조회-->
     <select id="getBoardDetail" resultMap="board">
         SELECT
-              BOARD_NUM
-            , TITLE
-            , CONTENT
-            , MEM_ID
-            , CATE_NUM
-            , READ_CNT
-            , LIKE_CNT
-            , DISLIKE_CNT
-            , CREATE_DATE
-        FROM BOARD
-        WHERE BOARD_NUM = #{boardNum}
+              B.BOARD_NUM
+            , B.TITLE
+            , B.CONTENT
+            , B.MEM_ID
+            , B.CATE_NUM
+            , B.READ_CNT
+            , B.LIKE_CNT
+            , B.DISLIKE_CNT
+            , B.CREATE_DATE
+            , C.CATE_NAME
+            , C.CATE_NUM AS CATEGORY_CATE_NUM
+        FROM BOARD B
+        LEFT JOIN CATEGORY C ON B.CATE_NUM = C.CATE_NUM
+        WHERE B.BOARD_NUM = #{boardNum}
     </select>
 
     <!--게시글 삭제-->
