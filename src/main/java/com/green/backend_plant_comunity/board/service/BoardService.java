@@ -71,11 +71,8 @@ public class BoardService {
    public List<BoardDTO> getBoardList(BoardDTO boardDTO){
       List<BoardDTO> list = boardMapper.getBoardList(boardDTO);
       
-      // 검색 조건이 있는데 결과가 없으면 예외 발생
-      if(boardDTO.getSearchType() != null && boardDTO.getSearchKeyword() != null 
-         && !boardDTO.getSearchKeyword().isEmpty() && list.isEmpty()) {
-         throw new RuntimeException("검색 결과가 없습니다.");
-      }
+      // ✅ 검색 결과가 없어도 빈 리스트 반환
+      // 프론트엔드에서 "검색 결과 없음" 처리
       
       return list;
    }
@@ -84,11 +81,8 @@ public class BoardService {
    public int getTotalBoardCnt(BoardDTO boardDTO){
       int totalCnt = boardMapper.getTotalBoardCnt(boardDTO);
       
-      // 검색 조건이 있는데 결과가 0이면 예외 발생
-      if(boardDTO.getSearchType() != null && boardDTO.getSearchKeyword() != null 
-         && !boardDTO.getSearchKeyword().isEmpty() && totalCnt == 0) {
-         throw new RuntimeException("검색 결과가 없습니다.");
-      }
+      // ✅ 검색 결과가 0이어도 정상 - 예외 제거
+      // 프론트엔드에서 "검색 결과 없음" 처리
       
       return totalCnt;
    }
