@@ -77,8 +77,19 @@ public class MemberService {
     }
 
     // [관리자] 전체 활성 회원 목록 조회
+    @Transactional(readOnly = true)
     public List<MemberDTO> getAllMembers() {
-        return memberMapper.selAllMembers();
+        List<MemberDTO> members = memberMapper.selAllMembers();
+
+        // 각 회원의 프로필 이미지 정보도 함께 가져오기
+        for (MemberDTO member : members) {
+            MemberProfileDTO profile = memberMapper.getProfileByMemId(member.getMemId());
+            if (profile != null) {
+                member.setProfileImageUrl(profile.getProfileImageUrl());
+            }
+        }
+
+        return members;
     }
 
     // [관리자] 삭제/탈퇴된 회원 목록 조회

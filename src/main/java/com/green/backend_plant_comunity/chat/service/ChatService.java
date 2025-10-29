@@ -5,16 +5,25 @@ import com.green.backend_plant_comunity.chat.dto.ChatParticipantDTO;
 import com.green.backend_plant_comunity.chat.dto.ChatRoomDTO;
 import com.green.backend_plant_comunity.chat.mapper.ChatMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-    
+
     private final ChatMapper chatMapper;
+
+    @Value("${file.upload-dir:D:/01-STUDY/dev/team/upload/}")
+    private String uploadDir;
     
     // ==================== CHAT_ROOM ====================
     
@@ -135,5 +144,43 @@ public class ChatService {
     // 안 읽은 메시지 수
     public int getUnreadCount(String memId, int roomId) {
         return chatMapper.getUnreadCount(memId, roomId);
+    }
+
+    // ==================== FILE UPLOAD ====================
+
+    // 채팅 파일 업로드
+    @Transactional
+    public Map<String, String> uploadChatFile(MultipartFile file, int roomId, String senderId) throws IOException {
+        // 채팅 전용 디렉토리 생성
+        String chatDir = uploadDir + "chat/";
+        File dir = new File(chatDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        // 파일명 생성 (중복 방지)
+        String originalFilename = file.getOriginalFilename();
+        String extension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+        }
+        String newFilename = "room" + roomId + "_" + senderId + "_" + System.currentTimeMillis() + extension;
+
+        // 파일 저장
+        File dest = new File(chatDir + newFilename);
+        System.out.println("파일 저장 경로: " + dest.getAbsolutePath());
+        file.transferTo(dest);
+        System.out.println("파일 저장 완료: " + dest.exists());
+
+        // 파일 URL 생성
+        String fileUrl = "/upload/chat/" + newFilename;
+
+        // 결과 반환
+        Map<String, String> result = new HashMap<>();
+        result.put("fileUrl", fileUrl);
+        result.put("fileName", originalFilename);
+        result.put("message", "파일 업로드 성공");
+
+        return result;
     }
 }
