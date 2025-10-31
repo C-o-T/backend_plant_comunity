@@ -16,7 +16,7 @@ public interface MemberMapper {
     int checkId(String memId);
 
     // 연락처 중복검사
-    int checkTell(String memTell);
+    int checkTell(@Param("memTell") String memTell, @Param("memId") String memId);
 
     // 사업자번호 중복검사
     int checkBusinessNum(String memBusinessNum);

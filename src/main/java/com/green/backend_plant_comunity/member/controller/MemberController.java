@@ -32,8 +32,8 @@ public class MemberController {
 
     // 연락처 중복검사
     @GetMapping("/checkTell/{memTell}")
-    public int checkTell(@PathVariable String memTell) {
-        return memberService.checkTell(memTell);
+    public int checkTell(@PathVariable String memTell, @RequestParam(required = false) String memId) {
+        return memberService.checkTell(memTell, memId);
     }
 
     // 사업자번호 중복검사

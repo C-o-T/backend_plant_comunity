@@ -31,8 +31,8 @@ public class MemberService {
     }
 
     // 연락처 중복검사
-    public int checkTell(String memTell) {
-        return memberMapper.checkTell(memTell);
+    public int checkTell(String memTell, String memId) {
+        return memberMapper.checkTell(memTell, memId);
     }
 
     // 사업자번호 중복검사

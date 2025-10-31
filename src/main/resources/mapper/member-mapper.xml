@@ -75,28 +75,28 @@
         );
     </insert>
 
-    <!--회원아이디 중복검사 (활성 회원만)-->
+    <!--회원아이디 중복검사 (모든 상태 회원)-->
     <select id="checkId" resultType="int">
         SELECT COUNT(*)
         FROM member
         WHERE MEM_ID = #{memId}
-        AND MEM_STATUS = 'ACTIVE'
     </select>
 
-    <!--회원연락처 중복검사 (활성 회원만)-->
+    <!--회원연락처 중복검사 (모든 상태 회원, 본인 제외)-->
     <select id="checkTell" resultType="int">
         SELECT COUNT(*)
         FROM member
         WHERE MEM_TELL = #{memTell}
-        AND MEM_STATUS = 'ACTIVE'
+        <if test="memId != null and memId != ''">
+            AND MEM_ID != #{memId}
+        </if>
     </select>
 
-    <!--사업자번호 중복검사 (활성 회원만)-->
+    <!--사업자번호 중복검사 (모든 상태 회원)-->
     <select id="checkBusinessNum" resultType="int">
         SELECT COUNT(*)
         FROM member
         WHERE MEM_BUSINESS_NUM = #{memBusinessNum}
-        AND MEM_STATUS = 'ACTIVE'
     </select>
 
     <!--로그인시 아이디, 비밀번호 일치 조회 (활성 회원만)-->

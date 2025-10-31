@@ -54,13 +54,14 @@ public class NotificationService {
             );
 
             if (response.getStatusCode() == HttpStatus.OK) {
-                System.out.println("푸시 알림 전송 성공: " + pushToken);
+                String tokenPreview = pushToken.length() > 20 ? pushToken.substring(0, 20) + "..." : pushToken;
+                System.out.println("✅ [알림] 푸시 전송 성공: " + title + " -> " + tokenPreview);
             } else {
-                System.err.println("푸시 알림 전송 실패: " + response.getStatusCode());
+                System.err.println("❌ [알림] 푸시 전송 실패: " + response.getStatusCode());
             }
 
         } catch (Exception e) {
-            System.err.println("푸시 알림 전송 오류: " + e.getMessage());
+            System.err.println("❌ [알림] 푸시 전송 오류: " + e.getMessage());
             e.printStackTrace();
         }
     }
