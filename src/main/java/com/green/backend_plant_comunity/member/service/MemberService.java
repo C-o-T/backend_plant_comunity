@@ -191,4 +191,14 @@ public class MemberService {
     public MemberProfileDTO getProfileByMemId(String memId) {
         return memberMapper.getProfileByMemId(memId);
     }
+
+    // 푸시 토큰 저장/수정
+    public int updatePushToken(String memId, String pushToken) {
+        return memberMapper.updatePushToken(memId, pushToken);
+    }
+
+    // 푸시 토큰으로 회원 조회
+    public MemberDTO getMemberByPushToken(String pushToken) {
+        return memberMapper.getMemberByPushToken(pushToken);
+    }
 }

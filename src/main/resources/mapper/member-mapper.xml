@@ -15,6 +15,7 @@
         <result column="MEM_BUSINESS_NUM"   property="memBusinessNum" />
         <result column="MEM_BUSINESS_NAME"  property="memBusinessName" />
         <result column="MEM_STATUS"         property="memStatus" />
+        <result column="PUSH_TOKEN"         property="pushToken" />
     </resultMap>
 
     <resultMap id="memberProfile" type="com.green.backend_plant_comunity.member.dto.MemberProfileDTO">
@@ -89,7 +90,7 @@
         WHERE MEM_TELL = #{memTell}
         AND MEM_STATUS = 'ACTIVE'
     </select>
-    
+
     <!--사업자번호 중복검사 (활성 회원만)-->
     <select id="checkBusinessNum" resultType="int">
         SELECT COUNT(*)
@@ -97,7 +98,7 @@
         WHERE MEM_BUSINESS_NUM = #{memBusinessNum}
         AND MEM_STATUS = 'ACTIVE'
     </select>
-    
+
     <!--로그인시 아이디, 비밀번호 일치 조회 (활성 회원만)-->
     <select id="login" resultMap="member">
         SELECT
@@ -120,7 +121,7 @@
         AND MEM_TELL = #{memTell}
         AND MEM_STATUS = 'ACTIVE'
     </select>
-    
+
     <!--비밀번호 찾기 (활성 회원만)-->
     <select id="findPw" resultMap="member">
         SELECT
@@ -147,6 +148,7 @@
             , MEM_BUSINESS_NUM
             , MEM_BUSINESS_NAME
             , MEM_STATUS
+            , PUSH_TOKEN
         FROM MEMBER
         WHERE MEM_ID = #{memId}
         AND MEM_STATUS = 'ACTIVE'
@@ -155,14 +157,17 @@
     <!--회원정보 수정-->
     <update id="updateMember">
         UPDATE MEMBER
-        SET
-            MEM_PW = #{memPw},
+        <set>
+            <if test="memPw != null and memPw != ''">
+                MEM_PW = #{memPw},
+            </if>
             MEM_ADDR = #{memAddr},
             MEM_DETAIL_ADDR = #{memDetailAddr},
             MEM_TELL = #{memTell},
             MEM_EMAIL = #{memEmail},
             MEM_BUSINESS_NUM = #{memBusinessNum},
             MEM_BUSINESS_NAME = #{memBusinessName}
+        </set>
         WHERE MEM_ID = #{memId}
     </update>
 
@@ -223,14 +228,14 @@
 
     <!-- [관리자] 회원 상태 변경 (논리적 삭제) -->
     <update id="updateMemberStatus">
-        UPDATE MEMBER 
+        UPDATE MEMBER
         SET MEM_STATUS = #{status}
         WHERE MEM_ID = #{memId}
     </update>
 
     <!-- [관리자] 회원 복구 -->
     <update id="restoreMember">
-        UPDATE MEMBER 
+        UPDATE MEMBER
         SET MEM_STATUS = 'ACTIVE'
         WHERE MEM_ID = #{memId}
         AND MEM_STATUS IN ('DELETED', 'WITHDRAWN')
@@ -287,5 +292,23 @@
         DELETE FROM member_profile
         WHERE MEM_ID = #{memId}
     </delete>
+
+    <!-- 푸시 토큰 저장/수정 -->
+    <update id="updatePushToken">
+        UPDATE MEMBER
+        SET PUSH_TOKEN = #{pushToken}
+        WHERE MEM_ID = #{memId}
+    </update>
+
+    <!-- 푸시 토큰으로 회원 조회 -->
+    <select id="getMemberByPushToken" resultMap="member">
+        SELECT
+            MEM_ID,
+            MEM_NAME,
+            PUSH_TOKEN
+        FROM MEMBER
+        WHERE PUSH_TOKEN = #{pushToken}
+        AND MEM_STATUS = 'ACTIVE'
+    </select>
 
 </mapper>
