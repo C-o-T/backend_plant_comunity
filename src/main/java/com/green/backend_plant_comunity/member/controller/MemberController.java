@@ -32,8 +32,8 @@ public class MemberController {
 
     // 연락처 중복검사
     @GetMapping("/checkTell/{memTell}")
-    public int checkTell(@PathVariable String memTell) {
-        return memberService.checkTell(memTell);
+    public int checkTell(@PathVariable String memTell, @RequestParam(required = false) String memId) {
+        return memberService.checkTell(memTell, memId);
     }
 
     // 사업자번호 중복검사
@@ -261,6 +261,41 @@ public class MemberController {
         } catch (Exception e) {
             response.put("success", false);
             response.put("message", "프로필 이미지 조회 중 오류가 발생했습니다: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
+
+    // 푸시 토큰 저장/수정
+    @PutMapping("/{memId}/pushToken")
+    public ResponseEntity<?> updatePushToken(
+            @PathVariable String memId,
+            @RequestBody Map<String, String> request) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            String pushToken = request.get("pushToken");
+
+            if (pushToken == null || pushToken.isEmpty()) {
+                response.put("success", false);
+                response.put("message", "푸시 토큰이 비어있습니다.");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            int result = memberService.updatePushToken(memId, pushToken);
+
+            if (result > 0) {
+                response.put("success", true);
+                response.put("message", "푸시 토큰이 저장되었습니다.");
+            } else {
+                response.put("success", false);
+                response.put("message", "푸시 토큰 저장에 실패했습니다.");
+            }
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "푸시 토큰 저장 중 오류가 발생했습니다: " + e.getMessage());
             return ResponseEntity.status(500).body(response);
         }
     }

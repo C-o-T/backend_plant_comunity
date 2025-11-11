@@ -31,8 +31,8 @@ public class MemberService {
     }
 
     // 연락처 중복검사
-    public int checkTell(String memTell) {
-        return memberMapper.checkTell(memTell);
+    public int checkTell(String memTell, String memId) {
+        return memberMapper.checkTell(memTell, memId);
     }
 
     // 사업자번호 중복검사
@@ -190,5 +190,15 @@ public class MemberService {
     // 회원의 프로필 이미지 조회
     public MemberProfileDTO getProfileByMemId(String memId) {
         return memberMapper.getProfileByMemId(memId);
+    }
+
+    // 푸시 토큰 저장/수정
+    public int updatePushToken(String memId, String pushToken) {
+        return memberMapper.updatePushToken(memId, pushToken);
+    }
+
+    // 푸시 토큰으로 회원 조회
+    public MemberDTO getMemberByPushToken(String pushToken) {
+        return memberMapper.getMemberByPushToken(pushToken);
     }
 }

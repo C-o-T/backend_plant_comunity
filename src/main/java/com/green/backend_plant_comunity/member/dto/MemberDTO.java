@@ -19,4 +19,5 @@ public class MemberDTO {
   private String memBusinessName;
   private String memStatus;  // ACTIVE, WITHDRAWN(회원탈퇴), DELETED(관리자삭제), SUSPENDED(정지)
   private String profileImageUrl;  // 프로필 이미지 URL
+  private String pushToken;  // 푸시 알림 토큰
 }

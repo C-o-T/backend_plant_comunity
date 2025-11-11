@@ -16,7 +16,7 @@ public interface MemberMapper {
     int checkId(String memId);
 
     // 연락처 중복검사
-    int checkTell(String memTell);
+    int checkTell(@Param("memTell") String memTell, @Param("memId") String memId);
 
     // 사업자번호 중복검사
     int checkBusinessNum(String memBusinessNum);
@@ -69,4 +69,10 @@ public interface MemberMapper {
 
     // 프로필 이미지 삭제
     int deleteProfile(@Param("memId") String memId);
+
+    // 푸시 토큰 저장/수정
+    int updatePushToken(@Param("memId") String memId, @Param("pushToken") String pushToken);
+
+    // 푸시 토큰으로 회원 조회
+    MemberDTO getMemberByPushToken(@Param("pushToken") String pushToken);
 }
